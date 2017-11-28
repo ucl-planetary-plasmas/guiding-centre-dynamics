@@ -12,11 +12,21 @@ r1 = 5; r2 = 20;
 
 pause
 
-plot3(s)
+r0 = 10;
+plot3(s, r0)
 
 pause
 
-plot4(s,r1,r2,c1d,c2d,c1m,c2m)
+plot4(s,c1d,c2d,c1m,c2m)
+
+pause
+
+plot5(s,c1d,c2d,c1m,c2m)
+
+pause
+
+r3 = 2;
+plot6(s,r3)
 
 function plot1(s, t0)
 
@@ -76,9 +86,9 @@ subplot(236)
 plot(ti,D1tt(c2d.r,ti),ti,D1tt(c2m.r,ti),ti,Dctt(c2d.rt,ti),ti,Dctt(c2m.rt,ti))
 legend({'D1(d)','D1(m)','Dc(d)','Dc(m)'})
 
-function plot3(s)
+function plot3(s,r)
 
-fprintf(1,'lmd = %f\n', getLmd(s,10))
+fprintf(1,'lmd = %f\n', getLmd(s,r))
 
 Li = [1:.5:40]';
 Lmdi = getLmd(s,Li);
@@ -90,14 +100,13 @@ plot(Li,[Li,Lmdi]),
 set(gca,'xlim',[0,15]);
 
 
-function plot4(s,r1,r2,c1d,c2d,c1m,c2m)
+function plot4(s,c1d,c2d,c1m,c2m)
 
-tmn = asin(max([c1m.mn,c2m.mn]));
-tmx = asin(min([c1m.mx,c2m.mx]));
+tmn = max([c1m.tmn,c2m.tmn]);
+tmx = min([c1m.tmx,c2m.tmx]);
 
 clf
 
-EPS = 2e-1;
 ti = linspace(tmn,tmx,151)';
 
 plot(ti, s.md.B(c1m.rt(0),sin(0))./s.md.B(c1m.rt(ti),sin(ti)),...
@@ -106,5 +115,51 @@ plot(ti, s.md.B(c1m.rt(0),sin(0))./s.md.B(c1m.rt(ti),sin(ti)),...
 fprintf(1,'%f ',...
 [getLC(s,'m',c1m), getLC(s,'m',c2m),...
  getLC(s,'d',c1d), getLC(s,'d',c2d),...
- getLCd(r1),getLCd(r2)]);
+ getLCd(c1d.r0),getLCd(c2d.r0)]);
 fprintf(1,'\n');
+
+function plot5(s,c1d,c2d,c1m,c2m)
+
+beta0 = pi/4;
+fprintf(1,'%f ',...
+[getLatMP(s,'m',c1m,beta0),...
+ getLatMP(s,'m',c2m,beta0),...
+ getLatMP(s,'d',c1d,beta0),...
+ getLatMP(s,'d',c2d,beta0),...
+ getLatMPd(c1d.r0,beta0),getLatMPd(c2d.r0,beta0)]);
+fprintf(1,'\n');
+
+b1 = linspace(getLC(s,'m',c1m),pi/2,50);
+b2 = linspace(getLC(s,'m',c2m),pi/2,50);
+plot(b1,getLatMP(s,'m',c1m,b1),...
+     b2,getLatMP(s,'m',c2m,b2));
+
+function plot6(s,r3)
+
+c3d = getMFc(s,'d',r3);
+c3m = getMFc(s,'m',r3);
+
+fprintf(1,'%f ',...
+[pi/10,pi/12,getLC(s,'m',c3m),getLatMP(s,'m',c3m,getLC(s,'m',c3m))+eps])
+fprintf(1,'\n');
+
+ri = [2:2:16]';
+lid = zeros(length(ri),4);
+lim = zeros(length(ri),4);
+for i=1:length(ri),
+  cd{i} = getMFc(s,'d',ri(i));
+  bd{i} = [pi/3,pi/4,pi/6,getLC(s,'d',cd{i})+eps];
+	lid(i,:) = 180/pi*getLatMP(s,'d',cd{i},bd{i});
+  cm{i} = getMFc(s,'m',ri(i));
+  bm{i} = [pi/3,pi/4,pi/6,getLC(s,'m',cm{i})+eps];
+	lim(i,:) = 180/pi*getLatMP(s,'m',cm{i},bm{i});
+end
+
+
+plot(ri,lid,'--');
+hold on
+plot(ri,lim)
+hold off
+
+
+ri = 2:2:16;

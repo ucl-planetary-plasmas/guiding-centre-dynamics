@@ -1,8 +1,10 @@
 function Lmd = getLmd(s,L)
 
-opts = {'spline', 'spline'};
-%opts = {'cubic', 'cubic'}; % for regular grid only
-opts = {'makima', 'makima'};
+opts = {'linear','extrap'};
+%opts = {'spline','extrap'};
+%opts = {'cubic','extrap'};
+%opts = {'makima','extrap'};
+
 
 if 0,
 tic
@@ -39,7 +41,7 @@ aLi = interp2(s.MD.c2d.r,s.MD.c2d.mu,s.MD.v2d.alpha,Li,zeros(size(Li)));
 Lmd = zeros(size(L));
 % inverse mapping 
 % given Li(aLi) for mdisc, interpolate Lmd for value of dipole alpha at L
-Lmd = interp1(aLi,Li,adipL);
+Lmd = interp1(aLi,Li,adipL,opts{:});
 %toc
 
 return
