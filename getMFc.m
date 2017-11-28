@@ -30,8 +30,9 @@ mu = C(2,2:end);
 [mu,I] = sort(mu);
 r = r(I);
 
-% save Req 
+% save Req and mftype
 c.r0 = Req;
+c.type = mftype;
 
 % min and max values in mu
 c.mn = min(mu);

@@ -28,6 +28,10 @@ pause
 r3 = 2;
 plot6(s,r3)
 
+pause
+
+plot7(s,c1d,c2d,c1m,c2m)
+
 function plot1(s, t0)
 
 ri = [s.MD.dims.r(1):s.MD.dims.r(end)]';
@@ -113,8 +117,8 @@ plot(ti, s.md.B(c1m.rt(0),sin(0))./s.md.B(c1m.rt(ti),sin(ti)),...
      ti, s.md.B(c2m.rt(0),sin(0))./s.md.B(c2m.rt(ti),sin(ti)))
 
 fprintf(1,'%f ',...
-[getLC(s,'m',c1m), getLC(s,'m',c2m),...
- getLC(s,'d',c1d), getLC(s,'d',c2d),...
+[getLC(s,c1m), getLC(s,c2m),...
+ getLC(s,c1d), getLC(s,c2d),...
  getLCd(c1d.r0),getLCd(c2d.r0)]);
 fprintf(1,'\n');
 
@@ -122,25 +126,25 @@ function plot5(s,c1d,c2d,c1m,c2m)
 
 beta0 = pi/4;
 fprintf(1,'%f ',...
-[getLatMP(s,'m',c1m,beta0),...
- getLatMP(s,'m',c2m,beta0),...
- getLatMP(s,'d',c1d,beta0),...
- getLatMP(s,'d',c2d,beta0),...
+[getLatMP(s,c1m,beta0),getLatMP(s,c2m,beta0),...
+ getLatMP(s,c1d,beta0),getLatMP(s,c2d,beta0),...
  getLatMPd(c1d.r0,beta0),getLatMPd(c2d.r0,beta0)]);
 fprintf(1,'\n');
 
-b1 = linspace(getLC(s,'m',c1m),pi/2,50);
-b2 = linspace(getLC(s,'m',c2m),pi/2,50);
-plot(b1,getLatMP(s,'m',c1m,b1),...
-     b2,getLatMP(s,'m',c2m,b2));
+b1 = linspace(getLC(s,c1m),pi/2,50);
+b2 = linspace(getLC(s,c2m),pi/2,50);
+plot(b1,getLatMP(s,c1m,b1),...
+     b2,getLatMP(s,c2m,b2));
 
 function plot6(s,r3)
 
 c3d = getMFc(s,'d',r3);
 c3m = getMFc(s,'m',r3);
 
+EPS = 1e-2;
+
 fprintf(1,'%f ',...
-[pi/10,pi/12,getLC(s,'m',c3m),getLatMP(s,'m',c3m,getLC(s,'m',c3m))+eps])
+[pi/10,pi/12,getLC(s,c3m),getLatMP(s,c3m,getLC(s,c3m))+EPS])
 fprintf(1,'\n');
 
 ri = [2:2:16]';
@@ -148,18 +152,29 @@ lid = zeros(length(ri),4);
 lim = zeros(length(ri),4);
 for i=1:length(ri),
   cd{i} = getMFc(s,'d',ri(i));
-  bd{i} = [pi/3,pi/4,pi/6,getLC(s,'d',cd{i})+eps];
-	lid(i,:) = 180/pi*getLatMP(s,'d',cd{i},bd{i});
+  bd{i} = [pi/3,pi/4,pi/6,getLC(s,cd{i})+EPS];
+	lid(i,:) = 180/pi*getLatMP(s,cd{i},bd{i});
   cm{i} = getMFc(s,'m',ri(i));
-  bm{i} = [pi/3,pi/4,pi/6,getLC(s,'m',cm{i})+eps];
-	lim(i,:) = 180/pi*getLatMP(s,'m',cm{i},bm{i});
+  bm{i} = [pi/3,pi/4,pi/6,getLC(s,cm{i})+EPS];
+	lim(i,:) = 180/pi*getLatMP(s,cm{i},bm{i});
 end
 
 
-plot(ri,lid,'--');
-hold on
-plot(ri,lim)
-hold off
+co = [0 0 1;
+      0 0.5 0;
+      1 0 0;
+      0 0.75 0.75];
+set(0,'DefaultAxesColorOrder',co);
+plot(ri,lid,'--',ri,lim);
 
+clf
+plot(ri,lid,'--',ri,lim);
 
-ri = 2:2:16;
+function plot7(s,c1d,c2d,c1m,c2m)
+
+beta = pi/6;
+
+fprintf(1,'%f ',...
+[testint(s,c1d,beta),testint(s,c2d,beta),...
+ testint(s,c1m,beta),testint(s,c2m,beta)]);
+fprintf(1,'\n');
