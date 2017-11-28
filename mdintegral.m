@@ -77,18 +77,26 @@ EPS = 2e-1;
 ti = linspace(tmn*(1-EPS),tmx*(1-EPS),100)';
 
 subplot(231),
-polarplot(ti,c1d.r(sin(ti)),ti,c1m.r(sin(ti)))
+polarplot(ti,c1d.rt(ti),ti,c1m.rt(ti))
 subplot(232)
-plot(ti,D1t(c1d.r,ti),ti,D1t(c1m.r,ti),ti,Dct(c1d.rt,ti),ti,Dct(c1m.rt,ti))
+plot(ti,D1t(c1d.r,ti),ti,D1t(c1m.r,ti),...
+     ti,Dct(c1d.rt,ti),ti,Dct(c1m.rt,ti),...
+     ti,c1d.drt(ti),ti,c1m.drt(ti))
 subplot(233)
-plot(ti,D1tt(c1d.r,ti),ti,D1tt(c1m.r,ti),ti,Dctt(c1d.rt,ti),ti,Dctt(c1m.rt,ti))
+plot(ti,D1tt(c1d.r,ti),ti,D1tt(c1m.r,ti),...
+     ti,Dctt(c1d.rt,ti),ti,Dctt(c1m.rt,ti),...
+		 ti,c1d.d2rtt(ti),ti,c1m.d2rtt(ti))
 subplot(234),
-polarplot(ti,c2d.r(sin(ti)),ti,c2m.r(sin(ti)))
+polarplot(ti,c2d.rt(ti),ti,c2m.rt(ti))
 subplot(235)
-plot(ti,D1t(c2d.r,ti),ti,D1t(c2m.r,ti),ti,Dct(c2d.rt,ti),ti,Dct(c2m.rt,ti))
+plot(ti,D1t(c2d.r,ti),ti,D1t(c2m.r,ti),...
+     ti,Dct(c2d.rt,ti),ti,Dct(c2m.rt,ti),...
+		 ti,c2d.drt(ti),ti,c2m.drt(ti))
 subplot(236)
-plot(ti,D1tt(c2d.r,ti),ti,D1tt(c2m.r,ti),ti,Dctt(c2d.rt,ti),ti,Dctt(c2m.rt,ti))
-legend({'D1(d)','D1(m)','Dc(d)','Dc(m)'})
+plot(ti,D1tt(c2d.r,ti),ti,D1tt(c2m.r,ti),...
+     ti,Dctt(c2d.rt,ti),ti,Dctt(c2m.rt,ti),...
+		 ti,c2d.d2rtt(ti),ti,c2m.d2rtt(ti))
+legend({'D1(d)','D1(m)','Dc(d)','Dc(m)','Di(d)','Di(m)'})
 
 function plot3(s,r)
 
@@ -178,3 +186,12 @@ fprintf(1,'%f ',...
 [testint(s,c1d,beta),testint(s,c2d,beta),...
  testint(s,c1m,beta),testint(s,c2m,beta)]);
 fprintf(1,'\n');
+
+l1d = getLatMP(s,c1d,beta); t1d = linspace(-l1d,l1d,100);
+l2d = getLatMP(s,c2d,beta); t2d = linspace(-l2d,l2d,100);
+l1m = getLatMP(s,c1m,beta); t1m = linspace(-l1m,l1m,100);
+l2m = getLatMP(s,c2m,beta); t2m = linspace(-l2m,l2m,100);
+
+polarplot(t1d, c1d.rt(t1d), t2d, c2d.rt(t2d),...
+          t1m, c1m.rt(t1m), t2m, c2m.rt(t2m))
+

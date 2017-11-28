@@ -49,6 +49,8 @@ c.tmx = asin(c.mx);
 ti = linspace(c.tmn,c.tmx,length(mu)/4);
 c.rt = griddedInterpolant(ti,c.r(sin(ti)),opts{:});
 
+c.drt = griddedInterpolant(ti,Dct(c.rt,ti),opts{:});
+c.d2rtt = griddedInterpolant(ti,Dctt(c.rt,ti),opts{:});
 return
 
 subplot(211), plot(ti,c.rt(ti),ti,c.r(sin(ti)))
