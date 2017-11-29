@@ -3,6 +3,7 @@ function df = D2r(fun,r,s)
 
 EPS = 1e-6;
 dr = EPS*r;
+dr(r==0) = EPS;
 df = (fun(r+dr,s)-fun(r-dr,s))./(2*dr);
 
 
