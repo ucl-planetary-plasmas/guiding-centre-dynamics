@@ -3,8 +3,13 @@ function lm = getLatMPd(L,aeq)
 % numerically
 %tic
 opts = optimset('fzero');
-fun = @(x,a) cos(x).^6-sin(a)^2.*sqrt(1+3*sin(x).^2);
-lm = fzero(@(x) fun(x,aeq),pi/4,opts);
+
+lm = zeros(size(aeq));
+
+f = @(x,a) cos(x).^6-sin(a)^2.*sqrt(1+3*sin(x).^2);
+for i = 1:length(aeq),
+  lm(i) = fzero(@(x) f(x,aeq(i)),pi/4,opts);
+end
 %toc
 
 return

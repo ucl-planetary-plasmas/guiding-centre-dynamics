@@ -16,6 +16,10 @@ plot6(s)
 
 plot7(s,c1d,c2d,c1m,c2m)
 
+plot8(s)
+
+plot9(s)
+
 function plot1(s)
 
 fprintf(1,'plot1\n');
@@ -202,18 +206,94 @@ fprintf(1,'plot7\n');
 
 beta = pi/6;
 
-fprintf(1,'%f ',...
-[testint(s,c1d,beta),testint(s,c2d,beta),...
- testint(s,c1m,beta),testint(s,c2m,beta)]);
-fprintf(1,'\n');
-
 l1d = getLatMP(s,c1d,beta); t1d = linspace(-l1d,l1d,100);
 l2d = getLatMP(s,c2d,beta); t2d = linspace(-l2d,l2d,100);
 l1m = getLatMP(s,c1m,beta); t1m = linspace(-l1m,l1m,100);
 l2m = getLatMP(s,c2m,beta); t2m = linspace(-l2m,l2m,100);
 
+fprintf(1,'%f ',l1d,l2d,l1m,l2m);
+fprintf(1,'\n');
+
 polarplot(t1d, c1d.rt(t1d), t2d, c2d.rt(t2d),...
           t1m, c1m.rt(t1m), t2m, c2m.rt(t2m))
 
+fprintf(1,'%f ',...
+[testint(s,c1d,beta),testint(s,c2d,beta),...
+ testint(s,c1m,beta),testint(s,c2m,beta)]);
+fprintf(1,'\n');
+
+fprintf(1,'Press return\n');
+
+pause
+
+function plot8(s)
+
+fprintf(1,'plot8\n');
+
+r = 10;
+cm = getMFc(s,'m',r);
+cd = getMFc(s,'d',r);
+beta = pi/6;
+lm = getLatMP(s,cm,beta); tm = linspace(0,lm,100);
+ld = getLatMP(s,cd,beta); td = linspace(0,ld,100);
+polarplot(tm, cm.rt(tm), td, cd.rt(td));
+legend({'md','dip'})
+
+[I1m,I2m] = testint2(s,cm,beta);
+[I1d,I2d] = testint2(s,cd,beta);
+
+fprintf(1,'%f ',I1m,I2m,I1d,I2d)
+fprintf(1,'\n');
+
+
+fprintf(1,'Press return\n');
+
+pause
+
+function plot9(s)
+
+fprintf(1,'plot9\n');
+
+EPS = 1e-6;
+
+ri = [2,5,10];
+nb = 10;
+phid = zeros(length(ri),nb);
+phim = zeros(length(ri),nb);
+phie = zeros(length(ri),nb);
+
+% use loss cone of smaller r as smallest pitch angle
+bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
+bd = linspace(bmnd,pi/3,nb);
+bmnm = getLC(s,getMFc(s,'m',ri(1)))+EPS;
+bm = linspace(bmnm,pi/3,nb);
+for i=1:length(ri),
+  cd{i} = getMFc(s,'d',ri(i));
+	phid(i,:) = Phi(s,cd{i},bd);
+	phie(i,:) = Phid(ri(i),bd);
+  cm{i} = getMFc(s,'m',ri(i));
+	phim(i,:) = Phi(s,cm{i},bm);
+end
+
+co = [0 0 1;
+      0 0.5 0;
+      1 0 0];
+set(0,'DefaultAxesColorOrder',co);
+subplot(211), 
+plot(bd,phid,'--')
+hold on
+plot(bd,phie);
+hold off
+
+subplot(212), 
+plot(bd,phid,'--')
+hold on
+plot(bm,phim);
+hold off
+
 fprintf(1,'Press return\n');
 pause
+
+pause
+
+
