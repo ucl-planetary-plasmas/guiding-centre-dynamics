@@ -20,6 +20,8 @@ plot8(s)
 
 plot9(s)
 
+plot10(s)
+
 function plot1(s)
 
 fprintf(1,'plot1\n');
@@ -294,6 +296,48 @@ hold off
 fprintf(1,'Press return\n');
 pause
 
+function plot10(s)
+
+fprintf(1,'plot10\n');
+
+EPS = 1e-6;
+
+ri = [2:2:14];
+nb = 4;
+
+phid = zeros(length(ri),nb);
+phim = zeros(length(ri),nb);
+phie = zeros(length(ri),nb);
+
+% use loss cone of smaller r as smallest pitch angle
+bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
+bd = [pi/3,pi/4,pi/6,bmnd];
+bmnm = getLC(s,getMFc(s,'m',ri(1)))+EPS;
+bm = [pi/3,pi/4,pi/6,bmnm];
+for i=1:length(ri),
+  cd{i} = getMFc(s,'d',ri(i));
+	phid(i,:) = Phi(s,cd{i},bd);
+	phie(i,:) = Phid(ri(i),bd);
+  cm{i} = getMFc(s,'m',ri(i));
+	phim(i,:) = Phi(s,cm{i},bm);
+end
+
+co = [0 0 1;
+      0 0.5 0;
+      1 0 0;
+      0 0.75 0.75];
+set(0,'DefaultAxesColorOrder',co);
+subplot(211), 
+plot(ri,phid,'--')
+hold on
+plot(ri,phie);
+hold off
+
+subplot(212), 
+plot(ri,phid,'--')
+hold on
+plot(ri,phim);
+hold off
+
+fprintf(1,'Press return\n');
 pause
-
-
