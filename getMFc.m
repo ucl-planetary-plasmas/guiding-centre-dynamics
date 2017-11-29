@@ -38,6 +38,9 @@ c.type = mftype;
 c.mn = min(mu);
 c.mx = max(mu);
 
+% length
+c.nr = length(mu);
+
 % contour function of mu
 c.r = griddedInterpolant(mu,r,opts{:});
 
@@ -45,12 +48,15 @@ c.r = griddedInterpolant(mu,r,opts{:});
 c.tmn = asin(c.mn);
 c.tmx = asin(c.mx);
 
-% regular grid in latitude
-ti = linspace(c.tmn,c.tmx,length(mu)/4);
+% regular grid in latitude odd number to catch zero latitude
+c.nrt = 2*fix(c.nr/16)+1;
+ti = linspace(c.tmn,c.tmx,c.nrt);
 c.rt = griddedInterpolant(ti,c.r(sin(ti)),opts{:});
 
 c.drt = griddedInterpolant(ti,Dct(c.rt,ti),opts{:});
-c.d2rtt = griddedInterpolant(ti,Dctt(c.rt,ti),opts{:});
+%c.d2rtt = griddedInterpolant(ti,Dctt(c.rt,ti),opts{:});
+c.d2rtt = griddedInterpolant(ti,Dct(c.drt,ti),opts{:});
+
 return
 
 subplot(211), plot(ti,c.rt(ti),ti,c.r(sin(ti)))
