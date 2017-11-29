@@ -353,10 +353,9 @@ beta = pi/6;
 cd = getMFc(s,'d',r);
 cm = getMFc(s,'m',r);
 
-[Omegac(s,cd,beta),...
- Omegag(s,cd,beta),...
- Omega(s,cd,beta),...
- Omegad(r,beta)]
+fprintf(1,'%f ',...
+[Omegac(s,cd,beta),Omegag(s,cd,beta),Omega(s,cd,beta),Omegad(r,beta)]);
+fprintf(1,'\n');
 
 
 fprintf(1,'Press return\n');
