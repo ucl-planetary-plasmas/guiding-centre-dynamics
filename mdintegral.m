@@ -22,6 +22,8 @@ plot9(s)
 
 plot10(s)
 
+plot11(s)
+
 function plot1(s)
 
 fprintf(1,'plot1\n');
@@ -341,3 +343,24 @@ hold off
 
 fprintf(1,'Press return\n');
 pause
+
+function plot11(s)
+
+fprintf(1,'plot11\n');
+
+r = 10;
+beta = pi/6;
+cd = getMFc(s,'d',r);
+cm = getMFc(s,'m',r);
+
+[Omegac(s,cd,beta),...
+ Omegag(s,cd,beta),...
+ Omega(s,cd,beta),...
+ Omegad(r,beta)]
+
+
+fprintf(1,'Press return\n');
+pause
+
+
+
