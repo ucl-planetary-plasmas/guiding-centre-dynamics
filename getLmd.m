@@ -1,14 +1,29 @@
 function Lmd = getLmd(s,L)
 
-opts = {'linear','extrap'};
+%opts = {'linear','extrap'};
 %opts = {'spline','extrap'};
 %opts = {'cubic','extrap'};
-%opts = {'makima','extrap'};
+opts = {'makima','extrap'};
 
+%tic
+% potential profile alpha for dipole at equator sampled at L
+adipL = interp2(s.MD.c2d.r,s.MD.c2d.mu,s.MD.v2d.alphadip,L,zeros(size(L)));
 
-if 0,
-tic
+% highly sampled equatorial distances
+Li = linspace(s.MD.dims.r(1),s.MD.dims.r(end),s.MD.param.nr);
+% potential profile alpha for mdisc at equator highly sampled
+aLi = interp2(s.MD.c2d.r,s.MD.c2d.mu,s.MD.v2d.alpha,Li,zeros(size(Li)));
+
 Lmd = zeros(size(L));
+% inverse mapping 
+% given Li(aLi) for mdisc, interpolate Lmd for value of dipole alpha at L
+Lmd = interp1(aLi,Li,adipL,opts{:});
+%toc
+
+return
+
+tic
+Lmd1 = zeros(size(L));
 for i=1:length(L),
   % find the corresponding potential at the surface for the dipole
   alpha0 = s.dip.a(1.0, sin(acos(sqrt(1/L(i)))));
@@ -23,28 +38,9 @@ for i=1:length(L),
   [mu,I] = sort(mu);
   r = r(I);
 	% interpolate at mu = 0
-  Lmd(i) = interp1(mu, r, 0);
+  Lmd1(i) = interp1(mu, r, 0);
 end
 toc
-Lmd1 = Lmd;
-end
-
-%tic
-% potential profile alpha for dipole at equator sampled at L
-adipL = interp2(s.MD.c2d.r,s.MD.c2d.mu,s.MD.v2d.alphadip,L,zeros(size(L)));
-
-% highly sampled equatorial distances
-Li = linspace(s.MD.dims.r(1),s.MD.dims.r(end),200);
-% potential profile alpha for mdisc at equator highly sampled
-aLi = interp2(s.MD.c2d.r,s.MD.c2d.mu,s.MD.v2d.alpha,Li,zeros(size(Li)));
-
-Lmd = zeros(size(L));
-% inverse mapping 
-% given Li(aLi) for mdisc, interpolate Lmd for value of dipole alpha at L
-Lmd = interp1(aLi,Li,adipL,opts{:});
-%toc
-
-return
 
 clf
 subplot(211), plot(L,Lmd,L,Lmd)
