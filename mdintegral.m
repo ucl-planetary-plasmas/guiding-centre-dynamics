@@ -2,38 +2,25 @@ function mdintegral(mdiscfile)
 
 s = readMdisc(mdiscfile);
 
-t0 = pi/10;
-plot1(s, t0);
+plot1(s);
 
-pause
+[c1d,c2d,c1m,c2m] = plot2(s);
 
-r1 = 5; r2 = 20;
-[c1d,c2d,c1m,c2m] = plot2(s,r1,r2);
-
-pause
-
-r0 = 10;
-plot3(s, r0)
-
-pause
+plot3(s)
 
 plot4(s,c1d,c2d,c1m,c2m)
 
-pause
-
 plot5(s,c1d,c2d,c1m,c2m)
 
-pause
-
-r3 = 2;
-plot6(s,r3)
-
-pause
+plot6(s)
 
 plot7(s,c1d,c2d,c1m,c2m)
 
-function plot1(s, t0)
+function plot1(s)
 
+fprintf(1,'plot1\n');
+
+t0 = pi/10;
 ri = [s.MD.dims.r(1):s.MD.dims.r(end)]';
 s0 = sin(t0)*ones(size(ri));
 
@@ -56,24 +43,32 @@ subplot(236)
 plot(ri,D2rr(s.dip.B,ri,s0),ri,D2rr(s.md.B,ri,s0))
 set(gca,'xlim',[0,90],'ylim',[-5e-6,25e-6])
 
+fprintf(1,'Press return\n');
+pause
 
-function [c1d,c2d,c1m,c2m] = plot2(s,r1,r2)
+function [c1d,c2d,c1m,c2m] = plot2(s)
+
+fprintf(1,'plot2\n');
+
+r1 = 5; 
+r2 = 20;
 
 c1d = getMFc(s,'d',r1);
 c2d = getMFc(s,'d',r2);
-fprintf(1,'%f ', [c1d.r(sin([0,.5])),asin([c1d.mn,c1d.mx,c2d.mn,c2d.mx])]);
+fprintf(1,'%f ', [c1d.rt([0,.5]),[c1d.tmn,c1d.tmx,c2d.tmn,c2d.tmx]]);
 fprintf(1,'\n');
 
 c1m = getMFc(s,'m',r1);
 c2m = getMFc(s,'m',r2);
-fprintf(1,'%f ', [c1m.r(sin([0,.5])),asin([c1m.mn,c1m.mx,c2m.mn,c2d.mx])]);
+fprintf(1,'%f ', [c1m.rt([0,.5]),[c1m.tmn,c1m.tmx,c2m.tmn,c2m.tmx]]);
 fprintf(1,'\n');
 
-tmn = asin(max([c1d.mn,c2d.mn,c1m.mn,c2m.mn]));
-tmx = asin(min([c1d.mx,c2d.mx,c1m.mx,c2m.mx]));
+tmn = max([c1d.tmn,c2d.tmn,c1m.tmn,c2m.tmn]);
+tmx = min([c1d.tmx,c2d.tmx,c1m.tmx,c2m.tmx]);
 
 clf
-EPS = 2e-1;
+% Avoid boundary effects for derivatives
+EPS = 1e-1;
 ti = linspace(tmn*(1-EPS),tmx*(1-EPS),100)';
 
 subplot(231),
@@ -98,9 +93,15 @@ plot(ti,D1tt(c2d.r,ti),ti,D1tt(c2m.r,ti),...
 		 ti,c2d.d2rtt(ti),ti,c2m.d2rtt(ti))
 legend({'D1(d)','D1(m)','Dc(d)','Dc(m)','Di(d)','Di(m)'})
 
+fprintf(1,'Press return\n');
+pause
+
 function plot3(s,r)
 
-fprintf(1,'lmd = %f\n', getLmd(s,r))
+fprintf(1,'plot3\n');
+
+r = 10;
+fprintf(1,'r=%f lmd=%f\n', r, getLmd(s,r))
 
 Li = [1:.5:40]';
 Lmdi = getLmd(s,Li);
@@ -111,18 +112,24 @@ subplot(212),
 plot(Li,[Li,Lmdi]),
 set(gca,'xlim',[0,15]);
 
+fprintf(1,'Press return\n');
+pause
 
 function plot4(s,c1d,c2d,c1m,c2m)
 
+fprintf(1,'plot4\n');
+
 tmn = max([c1m.tmn,c2m.tmn]);
 tmx = min([c1m.tmx,c2m.tmx]);
+n = max([c1m.nrt,c2m.nrt]);
 
 clf
 
-ti = linspace(tmn,tmx,151)';
+ti = linspace(tmn,tmx,n)';
+si = sin(ti);
 
-plot(ti, s.md.B(c1m.rt(0),sin(0))./s.md.B(c1m.rt(ti),sin(ti)),...
-     ti, s.md.B(c2m.rt(0),sin(0))./s.md.B(c2m.rt(ti),sin(ti)))
+plot(ti, s.md.B(c1m.rt(0),0)./s.md.B(c1m.rt(ti),si),...
+     ti, s.md.B(c2m.rt(0),0)./s.md.B(c2m.rt(ti),si))
 
 fprintf(1,'%f ',...
 [getLC(s,c1m), getLC(s,c2m),...
@@ -130,7 +137,12 @@ fprintf(1,'%f ',...
  getLCd(c1d.r0),getLCd(c2d.r0)]);
 fprintf(1,'\n');
 
+fprintf(1,'Press return\n');
+pause
+
 function plot5(s,c1d,c2d,c1m,c2m)
+
+fprintf(1,'plot5\n');
 
 beta0 = pi/4;
 fprintf(1,'%f ',...
@@ -144,29 +156,34 @@ b2 = linspace(getLC(s,c2m),pi/2,50);
 plot(b1,getLatMP(s,c1m,b1),...
      b2,getLatMP(s,c2m,b2));
 
-function plot6(s,r3)
+fprintf(1,'Press return\n');
+pause
 
+function plot6(s)
+
+fprintf(1,'plot6\n');
+
+r3 = 2;
 c3d = getMFc(s,'d',r3);
 c3m = getMFc(s,'m',r3);
 
-EPS = 1e-2;
+EPS = 1e-6;
 
 fprintf(1,'%f ',...
-[pi/10,pi/12,getLC(s,c3m),getLatMP(s,c3m,getLC(s,c3m))+EPS])
+[pi/10,pi/12,getLC(s,c3m),getLatMP(s,c3m,getLC(s,c3m)+EPS)])
 fprintf(1,'\n');
 
-ri = [2:2:16]';
+ri = linspace(2,16,10)';
 lid = zeros(length(ri),4);
 lim = zeros(length(ri),4);
+bd = [pi/3,pi/4,pi/6,getLC(s,c3d)+EPS];
+bm = [pi/3,pi/4,pi/6,getLC(s,c3m)+EPS];
 for i=1:length(ri),
   cd{i} = getMFc(s,'d',ri(i));
-  bd{i} = [pi/3,pi/4,pi/6,getLC(s,cd{i})+EPS];
-	lid(i,:) = 180/pi*getLatMP(s,cd{i},bd{i});
+	lid(i,:) = 180/pi*getLatMP(s,cd{i},bd);
   cm{i} = getMFc(s,'m',ri(i));
-  bm{i} = [pi/3,pi/4,pi/6,getLC(s,cm{i})+EPS];
-	lim(i,:) = 180/pi*getLatMP(s,cm{i},bm{i});
+	lim(i,:) = 180/pi*getLatMP(s,cm{i},bm);
 end
-
 
 co = [0 0 1;
       0 0.5 0;
@@ -174,11 +191,14 @@ co = [0 0 1;
       0 0.75 0.75];
 set(0,'DefaultAxesColorOrder',co);
 plot(ri,lid,'--',ri,lim);
+set(gca,'ylim',[0 50])
 
-clf
-plot(ri,lid,'--',ri,lim);
+fprintf(1,'Press return\n');
+pause
 
 function plot7(s,c1d,c2d,c1m,c2m)
+
+fprintf(1,'plot7\n');
 
 beta = pi/6;
 
@@ -195,3 +215,5 @@ l2m = getLatMP(s,c2m,beta); t2m = linspace(-l2m,l2m,100);
 polarplot(t1d, c1d.rt(t1d), t2d, c2d.rt(t2d),...
           t1m, c1m.rt(t1m), t2m, c2m.rt(t2m))
 
+fprintf(1,'Press return\n');
+pause

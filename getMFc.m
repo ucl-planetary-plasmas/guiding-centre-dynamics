@@ -4,19 +4,29 @@ opts = {'spline', 'spline'};
 %opts = {'cubic', 'cubic'}; % for regular grid only
 opts = {'makima', 'makima'};
 
-% find potential value of the L-shell
 switch lower(mftype),
+
   case {'d','dip','dipole'},
-    alpha = s.dip.a(Req,0);
-    % find isocontour of alpha, i.e. L-shell
-    C = contourc(s.MD.dims.r,s.MD.dims.mu,s.MD.v2d.alphadip,[alpha,alpha]);
+
+    afun = s.dip.a;
+    As = s.MD.v2d.alphadip;
+
 	case {'m','md','mdisc'},
-	  alpha = s.md.a(Req,0);
-    % find isocontour of alpha, i.e. L-shell
-    C = contourc(s.MD.dims.r,s.MD.dims.mu,s.MD.v2d.alpha,[alpha,alpha]);
+
+    afun = s.md.a;
+    As = s.MD.v2d.alpha;
+
   otherwise
+
     error('magnetic field type mftype not recognised',mftype)
+
 end
+Rs = s.MD.dims.r;
+Ms = s.MD.dims.mu;
+% get potential value of the L-shell
+alpha = afun(Req,0);
+% find isocontour of alpha, i.e. L-shell
+C = contourc(Rs,Ms,As,[alpha,alpha]);
 
 % extracts contour parameters
 level = C(1,1);
