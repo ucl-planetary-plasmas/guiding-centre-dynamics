@@ -5,33 +5,39 @@ opts = {'linear','extrap'};
 %opts = {'cubic','extrap'};
 opts = {'makima','extrap'};
 
-t = linspace(0,c.tmx,400);
-sint = sin(t);
+t = linspace(0,c.tmx,c.nrt);
+st = sin(t);
 switch lower(c.type),
 
   case {'d','dip','dipole'},
-    sina = sqrt(s.dip.B(c.rt(0),sin(0))./s.dip.B(c.rt(t),sint));
-    myfun = @(t,a) s.dip.B(c.rt(0),0)-sin(a).^2.*s.dip.B(c.rt(t),sin(t));
+
+	  B = s.dip.B;
 
   case {'m','md','mdisc'},
-    sina = sqrt(s.md.B(c.rt(0),sin(0))./s.md.B(c.rt(t),sint));
-    myfun = @(t,a) s.md.B(c.rt(0),0)-sin(a).^2.*s.md.B(c.rt(t),sin(t));
+
+	  B = s.md.B;
 
   otherwise
     error('magnetic field type c.type not recognised',c.type)
 end
 
-lmp = asin(interp1(sina,sint,sin(aeq),opts{:}));
+% create ratio sqrt(Beq/B) as function of latitude
+sina = sqrt(B(c.rt(0),sin(0))./B(c.rt(t),st));
 
-% numerically
+% inverse mapping: find the value of latitude where sqrt(Beq/B)=sin(aeq)
+lmp = asin(interp1(sina,st,sin(aeq),opts{:}));
+
+% numerically improve solution
+%fun = @(t,a) B(c.rt(0),0)-sin(a).^2.*B(c.rt(t),sin(t));
+fun = @(t,a) sqrt(B(c.rt(0),0))-sin(a).*sqrt(B(c.rt(t),sin(t)));
 opts = optimset('fzero');
-%opts = optimset('fminbnd'); opts.TolX=1e-12;
 lmp1 = zeros(size(aeq));
 for i=1:length(aeq),
-  tmax = getLC(s,c)+eps;
-	lmp1(i) = fzero(@(x) myfun(x,aeq(i)),0.8*tmax,opts);
-	%lmp1(i) = fminbnd(@(x) myfun(x,aeq(i)),0,tmax,opts);
+	lmp(i) = fzero(@(x) fun(x,aeq(i)),lmp(i),opts);
 end
+
+return
 lmp
 lmp1
+lmp-lmp1
 pause
