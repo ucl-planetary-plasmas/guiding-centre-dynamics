@@ -2,7 +2,7 @@ function I = Omegadg(r,beta)
 
 opts = {'AbsTol',1e-12,'RelTol',1e-9};
 
-EPS = 1e-9;
+EPS = 1e-10;
 
 % singularity at end point lm
 % f1(lm) can become pure imaginary
@@ -29,7 +29,7 @@ end
 
 
 function y=f(t,r,b)
-y = sin(b)^2./(1-sqrt(1+3*sin(t).^2)*sin(b)^2./cos(t).^6)./cos(t).^3.* ...
+y = sin(b)^2./sqrt(1-sqrt(1+3*sin(t).^2)*sin(b)^2./cos(t).^6)./cos(t).^3.* ...
     (1+sin(t).^2)./(1+3*sin(t).^2);
 end
 

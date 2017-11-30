@@ -353,9 +353,16 @@ beta = pi/6;
 cd = getMFc(s,'d',r);
 cm = getMFc(s,'m',r);
 
-fprintf(1,'%f ',...
-1/r^2*[Omegac(s,cd,beta),Omegag(s,cd,beta),Omega(s,cd,beta),...
- Omegadc(r,beta),Omegadg(r,beta),Omegad(r,beta)]);
+omdc = Omegadc(r,beta);
+omdg = Omegadg(r,beta);
+omd  = Omegad(r,beta);
+fprintf(1,'%f ',1/r^2*[omdc,omdg,omd,omdc+omdg/2]);
+fprintf(1,'\n');
+
+omc = Omegac(s,cd,beta);
+omg = Omegag(s,cd,beta);
+om = Omega(s,cd,beta);
+fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg/2]);
 fprintf(1,'\n');
 
 

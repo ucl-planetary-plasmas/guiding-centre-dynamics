@@ -2,7 +2,7 @@ function I = Omegadc(r,beta)
 
 opts = {'AbsTol',1e-12,'RelTol',1e-9};
 
-EPS = 1e-9;
+EPS = 1e-10;
 
 % zero at end point lm due to f1(lm) = 0
 % f1(lm) can become pure imaginary
