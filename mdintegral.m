@@ -354,7 +354,8 @@ cd = getMFc(s,'d',r);
 cm = getMFc(s,'m',r);
 
 fprintf(1,'%f ',...
-[Omegac(s,cd,beta),Omegag(s,cd,beta),Omega(s,cd,beta),Omegad(r,beta)]);
+1/r^2*[Omegac(s,cd,beta),Omegag(s,cd,beta),Omega(s,cd,beta),...
+ Omegadc(r,beta),Omegadg(r,beta),Omegad(r,beta)]);
 fprintf(1,'\n');
 
 

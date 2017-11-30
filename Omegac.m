@@ -34,6 +34,7 @@ end
 function y=f(t,c,Bm)
 r = c.rt(t);
 st = sin(t);
+K = abs(r);
 y = (sqrt(((Br(r,st)./Bt(r,st)).^2+1)./(1-B(r,st)/Bm)).*r);
 end
 
