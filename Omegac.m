@@ -40,7 +40,6 @@ for i=1:length(beta),
   end
 end
 
-
 I = zeros(size(beta));
 for i=1:length(beta),
   %fprintf(1,'lm=%f\n', lm(i));

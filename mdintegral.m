@@ -79,31 +79,38 @@ fprintf(1,'\n');
 tmn = max([c1d.tmn,c2d.tmn,c1m.tmn,c2m.tmn]);
 tmx = min([c1d.tmx,c2d.tmx,c1m.tmx,c2m.tmx]);
 
+c1e = getMFcd(s,'d',r1);
+c2e = getMFcd(s,'d',r2);
+
 clf
 % Avoid boundary effects for derivatives
 EPS = 1e-1;
 ti = linspace(tmn*(1-EPS),tmx*(1-EPS),100)';
 
 subplot(231),
-polarplot(ti,c1d.rt(ti),ti,c1m.rt(ti))
+polarplot(ti,c1d.rt(ti),ti,c1m.rt(ti),ti,c1e.rt(ti))
 subplot(232)
 plot(ti,D1t(c1d.r,ti),ti,D1t(c1m.r,ti),...
      ti,Dct(c1d.rt,ti),ti,Dct(c1m.rt,ti),...
-     ti,c1d.drt(ti),ti,c1m.drt(ti))
+     ti,c1d.drt(ti),ti,c1m.drt(ti),...
+		 ti,c1e.drt(ti))
 subplot(233)
 plot(ti,D1tt(c1d.r,ti),ti,D1tt(c1m.r,ti),...
      ti,Dctt(c1d.rt,ti),ti,Dctt(c1m.rt,ti),...
-		 ti,c1d.d2rtt(ti),ti,c1m.d2rtt(ti))
+		 ti,c1d.d2rtt(ti),ti,c1m.d2rtt(ti),...
+		 ti,c1e.d2rtt(ti))
 subplot(234),
-polarplot(ti,c2d.rt(ti),ti,c2m.rt(ti))
+polarplot(ti,c2d.rt(ti),ti,c2m.rt(ti),ti,c2e.rt(ti))
 subplot(235)
 plot(ti,D1t(c2d.r,ti),ti,D1t(c2m.r,ti),...
      ti,Dct(c2d.rt,ti),ti,Dct(c2m.rt,ti),...
-		 ti,c2d.drt(ti),ti,c2m.drt(ti))
+		 ti,c2d.drt(ti),ti,c2m.drt(ti),...
+		 ti,c2e.drt(ti))
 subplot(236)
 plot(ti,D1tt(c2d.r,ti),ti,D1tt(c2m.r,ti),...
      ti,Dctt(c2d.rt,ti),ti,Dctt(c2m.rt,ti),...
-		 ti,c2d.d2rtt(ti),ti,c2m.d2rtt(ti))
+		 ti,c2d.d2rtt(ti),ti,c2m.d2rtt(ti),...
+		 ti,c2e.d2rtt(ti))
 legend({'D1(d)','D1(m)','Dc(d)','Dc(m)','Di(d)','Di(m)'})
 
 fprintf(1,'Press return\n');
@@ -356,6 +363,7 @@ fprintf(1,'plot11\n');
 r = 10;
 beta = pi/6;
 cd = getMFc(s,'d',r);
+ce = getMFcd(s,'d',r);
 cm = getMFc(s,'m',r);
 
 omdc = Omegadc(r,beta);
@@ -370,6 +378,11 @@ om = Omega(s,cd,beta);
 fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg/2]);
 fprintf(1,'\n');
 
+omc = Omegac(s,ce,beta);
+omg = Omegag(s,ce,beta);
+om = Omega(s,ce,beta);
+fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg/2]);
+fprintf(1,'\n');
 
 fprintf(1,'Press return\n');
 pause
