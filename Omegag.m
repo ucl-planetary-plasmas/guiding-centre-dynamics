@@ -24,6 +24,7 @@ switch lower(c.type),
 end
 
 EPS = 1e-10;
+EPS = 0;
 
 % zero at end point lm due to f1(lm) = 0
 % f1(lm) can become pure imaginary

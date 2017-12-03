@@ -24,6 +24,11 @@ plot10(s)
 
 plot11(s)
 
+plot12(s)
+
+plot13(s)
+
+
 function plot1(s)
 
 fprintf(1,'plot1\n');
@@ -369,5 +374,97 @@ fprintf(1,'\n');
 fprintf(1,'Press return\n');
 pause
 
+
+function plot12(s)
+
+fprintf(1,'plot12\n');
+
+EPS = 1e-6;
+
+ri = [2,5,10];
+nb = 10;
+phid = zeros(length(ri),nb);
+phim = zeros(length(ri),nb);
+phie = zeros(length(ri),nb);
+
+% use loss cone of smaller r as smallest pitch angle
+bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
+bd = linspace(bmnd,pi/3,nb);
+bmnm = getLC(s,getMFc(s,'m',ri(1)))+EPS;
+bm = linspace(bmnm,pi/3,nb);
+for i=1:length(ri),
+  cd{i} = getMFc(s,'d',ri(i));
+  omd(i,:) = Omega(s,cd{i},bd);
+  ome(i,:) = Omegad(ri(i),bd);
+  cm{i} = getMFc(s,'m',ri(i));
+  omm(i,:) = Omega(s,cm{i},bm);
+end
+
+co = [0 0 1;
+      0 0.5 0;
+      1 0 0];
+set(0,'DefaultAxesColorOrder',co);
+subplot(211),
+plot(bd,omd,'--')
+hold on
+plot(bd,ome);
+hold off
+
+subplot(212),
+plot(bd,omd,'--')
+hold on
+plot(bm,omm);
+hold off
+
+
+fprintf(1,'Press return\n');
+pause
+
+function plot13(s)
+
+fprintf(1,'plot13\n');
+
+EPS = 1e-6;
+
+ri = [2:2:14];
+nb = 4;
+
+phid = zeros(length(ri),nb);
+phim = zeros(length(ri),nb);
+phie = zeros(length(ri),nb);
+
+% use loss cone of smaller r as smallest pitch angle
+bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
+bd = [pi/3,pi/4,pi/6,bmnd];
+bmnm = getLC(s,getMFc(s,'m',ri(1)))+EPS;
+bm = [pi/3,pi/4,pi/6,bmnm];
+for i=1:length(ri),
+  cd{i} = getMFc(s,'d',ri(i));
+  omd(i,:) = Omega(s,cd{i},bd);
+  ome(i,:) = Omegad(ri(i),bd);
+  cm{i} = getMFc(s,'m',ri(i));
+  omm(i,:) = Omega(s,cm{i},bm);
+end
+
+co = [0 0 1;
+      0 0.5 0;
+      1 0 0;
+      0 0.75 0.75];
+set(0,'DefaultAxesColorOrder',co);
+subplot(211),
+plot(ri,omd,'--')
+hold on
+plot(ri,ome);
+hold off
+
+subplot(212),
+plot(ri,omd,'--')
+hold on
+plot(ri,omm);
+hold off
+
+
+fprintf(1,'Press return\n');
+pause
 
 

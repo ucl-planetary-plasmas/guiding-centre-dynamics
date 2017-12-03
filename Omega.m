@@ -23,7 +23,8 @@ switch lower(c.type),
 
 end
 
-EPS = 1e-10;
+EPS = 1e-12;
+EPS = 0;
 
 % zero at end point lm due to f1(lm) = 0
 % f1(lm) can become pure imaginary
@@ -32,13 +33,12 @@ Bm = B(c.rt(lm),sin(lm));
 
 % zr should be real near zero
 zr = f1(lm,c,Bm);
-for i=1:length(beta),
+for i=1:length(zr),
   if ~isreal(zr(i)),
     fprintf(1,'Omega-> lm=%f f1(lm,c,Bm)=(%f+i%f)\n',...
-            lm,real(zr(i)),imag(zr(i)));
+            lm(i),real(zr(i)),imag(zr(i)));
   end
 end
-
 
 I = zeros(size(beta));
 for i=1:length(beta),
@@ -66,7 +66,7 @@ end
 function y=f1(t,c,Bm)
 r = c.rt(t);
 st = sin(t);
-y = sqrt(1-B(r,st)/Bm);
+y = sqrt(1-B(r,st)./Bm);
 end
 
 end
