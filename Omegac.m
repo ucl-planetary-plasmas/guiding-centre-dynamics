@@ -35,7 +35,10 @@ function y=f(t,c,Bm)
 r = c.rt(t);
 st = sin(t);
 K = c.kappa(t);
-y = K./B(r,st).*sqrt(((Br(r,st)./Bt(r,st)).^2+1).*(1-B(r,st)/Bm))./cos(t);
+br = Br(r,st);
+bt = Bt(r,st);
+b = B(r,st);
+y = K./b.*sqrt(((br./bt).^2+1).*(1-b/Bm))./cos(t);
 end
 
 end

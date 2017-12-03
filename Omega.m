@@ -42,7 +42,7 @@ b = B(r,st);
 dbdr = D2r(B,r,st);
 dbdt = D2t(B,r,t);
 BxdB = br./r.*dbdt-bt.*dbdr.*dr;
-y = ((1-b./Bm).*K./b+BxdB/2/./b.^2/Bm).* ...
+y = ((1-b./Bm).*K./b + .5*BxdB./b.^2/Bm).* ...
     sqrt(((br./bt).^2+1)./(1-b/Bm))./cos(t);
 end
 
