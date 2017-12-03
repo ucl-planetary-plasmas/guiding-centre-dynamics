@@ -33,8 +33,17 @@ end
 
 function y=f(t,c,Bm)
 r = c.rt(t);
+dr = c.drt(t);
 st = sin(t);
-y = (sqrt(((Br(r,st)./Bt(r,st)).^2+1)./(1-B(r,st)/Bm)).*r);
+K = c.kappa(t);
+br = Br(r,st);
+bt = Bt(r,st);
+b = B(r,st);
+dbdr = D2r(B,r,st);
+dbdt = D2t(B,r,t);
+BxdB = br./r.*dbdt-bt.*dbdr.*dr;
+y = ((1-b./Bm).*K./b+BxdB/2/./b.^2/Bm).* ...
+    sqrt(((br./bt).^2+1)./(1-b/Bm))./cos(t);
 end
 
 end

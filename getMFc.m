@@ -67,8 +67,21 @@ c.drt = griddedInterpolant(ti,Dct(c.rt,ti),opts{:});
 %c.d2rtt = griddedInterpolant(ti,Dctt(c.rt,ti),opts{:});
 c.d2rtt = griddedInterpolant(ti,Dct(c.drt,ti),opts{:});
 
+% curvature
+c.kappa = griddedInterpolant(ti,curvature(ti),opts{:});
+
 return
 
-subplot(211), plot(ti,c.rt(ti),ti,c.r(sin(ti)))
-subplot(212), plot(ti,c.rt(ti)-c.r(sin(ti)))
+subplot(311), plot(ti,c.rt(ti),ti,c.r(sin(ti)))
+subplot(312), plot(ti,c.rt(ti)-c.r(sin(ti)))
+subplot(313), plot(ti,c.kappa(ti))
 pause
+
+function k = curvature(ti)
+
+k = abs(c.rt(ti).^2+2*c.drt(ti).^2-c.rt(ti).*c.d2rtt(ti))./...
+    (c.rt(ti).^2+c.drt(ti).^2).^1.5;
+
+end
+
+end
