@@ -23,12 +23,29 @@ switch lower(c.type),
 
 end
 
-lm = getLatMP(s,c,beta);
+EPS = 1e-10;
+
+% zero at end point lm due to f1(lm) = 0
+% f1(lm) can become pure imaginary
+lm = getLatMP(s,c,beta)-EPS;
 Bm = B(c.rt(lm),sin(lm));
+
+% zr should be real near zero
+zr = f1(lm,c,Bm);
+for i=1:length(beta),
+  if ~isreal(zr(i)),
+    fprintf(1,'Omega-> lm=%f f1(lm,c,Bm)=(%f+i%f)\n',...
+            lm,real(zr(i)),imag(zr(i)));
+  end
+end
+
 
 I = zeros(size(beta));
 for i=1:length(beta),
-  I(i) = integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:});
+  %fprintf(1,'lm=%f\n', lm(i));
+	t = linspace(0,lm(i),100);
+	clf, plot(t,f(t,c,Bm(i)),'-o'),title('\Omega'); pause
+  I(i) = integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:},'Waypoints',lm(i));
 end
 
 function y=f(t,c,Bm)
@@ -41,9 +58,15 @@ bt = Bt(r,st);
 b = B(r,st);
 dbdr = D2r(B,r,st);
 dbdt = D2t(B,r,t);
-BxdB = br./r.*dbdt-bt.*dbdr.*dr;
+BxdB = abs(br./r.*dbdt-bt.*dbdr.*dr);
 y = ((1-b./Bm).*K./b + .5*BxdB./b.^2/Bm).* ...
     sqrt(((br./bt).^2+1)./(1-b/Bm))./cos(t);
+end
+
+function y=f1(t,c,Bm)
+r = c.rt(t);
+st = sin(t);
+y = sqrt(1-B(r,st)/Bm);
 end
 
 end

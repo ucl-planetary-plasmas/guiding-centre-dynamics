@@ -11,9 +11,9 @@ lm = getLatMPd(r,beta)-EPS;
 % zr should be real near zero
 zr = f1(lm,r,beta);
 for i=1:length(beta),
-  if ~isreal(zr),
+  if ~isreal(zr(i)),
     fprintf(1,'Omegad-> lm=%f f1(lm,r,beta)=(%f+i%f)\n',...
-		        lm,real(zr),imag(zr));
+		        lm,real(zr(i)),imag(zr(i)));
   end
 end
 
