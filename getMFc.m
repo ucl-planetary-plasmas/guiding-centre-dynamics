@@ -62,14 +62,14 @@ c.tmx = asin(c.mx);
 c.nrt = 2*fix(c.nr/16)+1;
 ti = linspace(c.tmn,c.tmx,c.nrt);
 %c.rt = griddedInterpolant(ti,c.r(sin(ti)),opts{:});
-c.rt = griddedInterpolant(ti,smooth(ti,c.r(sin(ti))),opts{:});
+c.rt = griddedInterpolant(ti,ds(ti,c.r(sin(ti))),opts{:});
 
 c.drt = griddedInterpolant(ti,Dct(c.rt,ti),opts{:});
-c.drt = griddedInterpolant(ti,smooth(ti,Dct(c.rt,ti)),opts{:});
+c.drt = griddedInterpolant(ti,ds(ti,Dct(c.rt,ti)),opts{:});
 
 %c.d2rtt = griddedInterpolant(ti,Dctt(c.rt,ti),opts{:});
 c.d2rtt = griddedInterpolant(ti,Dct(c.drt,ti),opts{:});
-c.d2rtt = griddedInterpolant(ti,smooth(ti,Dct(c.drt,ti)),opts{:});
+c.d2rtt = griddedInterpolant(ti,ds(ti,Dct(c.drt,ti)),opts{:});
 
 % curvature
 c.kappa = griddedInterpolant(ti,Kappa(ti,c),opts{:});
