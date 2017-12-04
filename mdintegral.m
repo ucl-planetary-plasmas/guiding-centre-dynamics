@@ -88,29 +88,31 @@ EPS = 1e-1;
 ti = linspace(tmn*(1-EPS),tmx*(1-EPS),100)';
 
 subplot(231),
-polarplot(ti,c1d.rt(ti),ti,c1m.rt(ti),ti,c1e.rt(ti))
+h=polarplot(ti,c1d.rt(ti),ti,c1m.rt(ti),ti,c1e.rt(ti));
+set(h(end),'Color','k','LineStyle',':');
 subplot(232)
 plot(ti,D1t(c1d.r,ti),ti,D1t(c1m.r,ti),...
      ti,Dct(c1d.rt,ti),ti,Dct(c1m.rt,ti),...
      ti,c1d.drt(ti),ti,c1m.drt(ti),...
-		 ti,c1e.drt(ti))
+		 ti,c1e.drt(ti),'k:')
 subplot(233)
 plot(ti,D1tt(c1d.r,ti),ti,D1tt(c1m.r,ti),...
      ti,Dctt(c1d.rt,ti),ti,Dctt(c1m.rt,ti),...
 		 ti,c1d.d2rtt(ti),ti,c1m.d2rtt(ti),...
-		 ti,c1e.d2rtt(ti))
+		 ti,c1e.d2rtt(ti),'k:')
 subplot(234),
-polarplot(ti,c2d.rt(ti),ti,c2m.rt(ti),ti,c2e.rt(ti))
+h=polarplot(ti,c2d.rt(ti),ti,c2m.rt(ti),ti,c2e.rt(ti));
+set(h(end),'Color','k','LineStyle',':');
 subplot(235)
 plot(ti,D1t(c2d.r,ti),ti,D1t(c2m.r,ti),...
      ti,Dct(c2d.rt,ti),ti,Dct(c2m.rt,ti),...
 		 ti,c2d.drt(ti),ti,c2m.drt(ti),...
-		 ti,c2e.drt(ti))
+		 ti,c2e.drt(ti),'k:')
 subplot(236)
 plot(ti,D1tt(c2d.r,ti),ti,D1tt(c2m.r,ti),...
      ti,Dctt(c2d.rt,ti),ti,Dctt(c2m.rt,ti),...
 		 ti,c2d.d2rtt(ti),ti,c2m.d2rtt(ti),...
-		 ti,c2e.d2rtt(ti))
+		 ti,c2e.d2rtt(ti),'k:')
 legend({'D1(d)','D1(m)','Dc(d)','Dc(m)','Di(d)','Di(m)'})
 
 fprintf(1,'Press return\n');
@@ -366,9 +368,12 @@ cd = getMFc(s,'d',r);
 ce = getMFcd(s,'d',r);
 cm = getMFc(s,'m',r);
 
-omdc = Omegadc(r,beta);
+omdc = Omegadc(r,beta); figure
+omc = Omegac(s,ce,beta);
 omdg = Omegadg(r,beta);
+omg = Omegag(s,ce,beta);
 omd  = Omegad(r,beta);
+om = Omega(s,ce,beta);
 fprintf(1,'%f ',1/r^2*[omdc,omdg,omd,omdc+omdg/2]);
 fprintf(1,'\n');
 
@@ -378,9 +383,6 @@ om = Omega(s,cd,beta);
 fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg/2]);
 fprintf(1,'\n');
 
-omc = Omegac(s,ce,beta);
-omg = Omegag(s,ce,beta);
-om = Omega(s,ce,beta);
 fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg/2]);
 fprintf(1,'\n');
 
@@ -396,9 +398,9 @@ EPS = 1e-6;
 
 ri = [2,5,10];
 nb = 10;
-phid = zeros(length(ri),nb);
-phim = zeros(length(ri),nb);
-phie = zeros(length(ri),nb);
+omd = zeros(length(ri),nb);
+omm = zeros(length(ri),nb);
+ome = zeros(length(ri),nb);
 
 % use loss cone of smaller r as smallest pitch angle
 bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
@@ -442,9 +444,9 @@ EPS = 1e-6;
 ri = [2:2:14];
 nb = 4;
 
-phid = zeros(length(ri),nb);
-phim = zeros(length(ri),nb);
-phie = zeros(length(ri),nb);
+omd = zeros(length(ri),nb);
+omm = zeros(length(ri),nb);
+ome = zeros(length(ri),nb);
 
 % use loss cone of smaller r as smallest pitch angle
 bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
