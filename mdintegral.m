@@ -289,9 +289,11 @@ bm = linspace(bmnm,pi/3,nb);
 for i=1:length(ri),
   cd{i} = getMFc(s,'d',ri(i));
 	phid(i,:) = Phi(s,cd{i},bd);
-	phie(i,:) = Phid(ri(i),bd);
+
   cm{i} = getMFc(s,'m',ri(i));
 	phim(i,:) = Phi(s,cm{i},bm);
+
+	phie(i,:) = Phid(ri(i),bd);
 	phia(i,:) = Phia(ri(i),bd);
 end
 
@@ -338,9 +340,11 @@ bm = [pi/3,pi/4,pi/6,bmnm];
 for i=1:length(ri),
   cd{i} = getMFc(s,'d',ri(i));
 	phid(i,:) = Phi(s,cd{i},bd);
-	phie(i,:) = Phid(ri(i),bd);
+
   cm{i} = getMFc(s,'m',ri(i));
 	phim(i,:) = Phi(s,cm{i},bm);
+
+	phie(i,:) = Phid(ri(i),bd);
 	phia(i,:) = Phia(ri(i),bd);
 end
 
@@ -378,7 +382,7 @@ cm = getMFc(s,'m',r);
 
 omdc = Omegadc(r,beta); %figure
 omc = Omegac(s,ce,beta); %figure
-omdg = Omegadg(r,beta); figure
+omdg = Omegadg(r,beta); %figure
 omg = Omegag(s,ce,beta);
 omd  = Omegad(r,beta);
 om = Omega(s,ce,beta);
@@ -404,41 +408,68 @@ fprintf(1,'plot12\n');
 
 EPS = 1e-6;
 
-ri = [2,5,10];
+ri = [2,5,10]';
 nb = 10;
 omd = zeros(length(ri),nb);
 omm = zeros(length(ri),nb);
 ome = zeros(length(ri),nb);
+
+phid = zeros(length(ri),nb);
+phim = zeros(length(ri),nb);
+phie = zeros(length(ri),nb);
+
+oOpd = zeros(length(ri),nb);
+oOpm = zeros(length(ri),nb);
+oOpe = zeros(length(ri),nb);
+oOpa = zeros(length(ri),nb);
 
 % use loss cone of smaller r as smallest pitch angle
 bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
 bd = linspace(bmnd,pi/3,nb);
 bmnm = getLC(s,getMFc(s,'m',ri(1)))+EPS;
 bm = linspace(bmnm,pi/3,nb);
+
+Ri = repmat(ri,1,nb);
+
 for i=1:length(ri),
   cd{i} = getMFc(s,'d',ri(i));
+	phid(i,:) = Phi(s,cd{i},bd);
   omd(i,:) = Omega(s,cd{i},bd);
-  ome(i,:) = Omegad(ri(i),bd);
+
   cm{i} = getMFc(s,'m',ri(i));
+	phim(i,:) = Phi(s,cm{i},bm);
   omm(i,:) = Omega(s,cm{i},bm);
+
+	phie(i,:) = Phid(ri(i),bd);
+  ome(i,:) = Omegad(ri(i),bd);
+
+	oOpa(i,:) = OmegaOverPhia(ri(i),bd);
 end
+
+oOpd = (omd./phid)./Ri;
+oOpm = (omm./phim)./Ri;
+oOpe = (ome./phie)./Ri;
 
 co = [0 0 1;
       0 0.5 0;
       1 0 0];
 set(0,'DefaultAxesColorOrder',co);
 subplot(211),
-plot(bd,omd,'--')
+%plot(bd,omd,'--')
+plot(bd,oOpd,'--')
 hold on
-plot(bd,ome);
+%plot(bd,ome);
+plot(bd,oOpe);
+plot(bd,oOpa,':');
 hold off
 
 subplot(212),
-plot(bd,omd,'--')
+%plot(bd,omd,'--')
+plot(bd,oOpd,'--')
 hold on
-plot(bm,omm);
+%plot(bm,omm);
+plot(bm,oOpm);
 hold off
-
 
 fprintf(1,'Press return\n');
 pause
@@ -449,25 +480,50 @@ fprintf(1,'plot13\n');
 
 EPS = 1e-6;
 
-ri = [2:2:14];
+ri = [2:2:14]';
 nb = 4;
 
 omd = zeros(length(ri),nb);
 omm = zeros(length(ri),nb);
 ome = zeros(length(ri),nb);
 
+phid = zeros(length(ri),nb);
+phim = zeros(length(ri),nb);
+phie = zeros(length(ri),nb);
+
+oOpd = zeros(length(ri),nb);
+oOpm = zeros(length(ri),nb);
+oOpe = zeros(length(ri),nb);
+oOpa = zeros(length(ri),nb);
+
 % use loss cone of smaller r as smallest pitch angle
 bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
 bd = [pi/3,pi/4,pi/6,bmnd];
 bmnm = getLC(s,getMFc(s,'m',ri(1)))+EPS;
 bm = [pi/3,pi/4,pi/6,bmnm];
+
+Ri = repmat(ri,1,nb);
+
 for i=1:length(ri),
   cd{i} = getMFc(s,'d',ri(i));
+	phid(i,:) = Phi(s,cd{i},bd);
   omd(i,:) = Omega(s,cd{i},bd);
-  ome(i,:) = Omegad(ri(i),bd);
+
   cm{i} = getMFc(s,'m',ri(i));
+	phim(i,:) = Phi(s,cm{i},bm);
   omm(i,:) = Omega(s,cm{i},bm);
+
+	phie(i,:) = Phid(ri(i),bd);
+  ome(i,:) = Omegad(ri(i),bd);
+
+	oOpa(i,:) = OmegaOverPhia(ri(i),bd);
 end
+
+oOpd = (omd./phid)./Ri.^2;
+oOpm = (omm./phim)./Ri.^2;
+oOpe = (ome./phie)./Ri.^2;
+
+oOpa = oOpa./Ri;
 
 co = [0 0 1;
       0 0.5 0;
@@ -475,15 +531,20 @@ co = [0 0 1;
       0 0.75 0.75];
 set(0,'DefaultAxesColorOrder',co);
 subplot(211),
-plot(ri,omd,'--')
+%plot(ri,omd,'--')
+plot(ri,oOpd,'--')
 hold on
-plot(ri,ome);
+%plot(ri,ome);
+plot(ri,oOpe);
+plot(ri,oOpa,':');
 hold off
 
 subplot(212),
-plot(ri,omd,'--')
+%plot(ri,omd,'--')
+plot(ri,oOpd,'--')
 hold on
-plot(ri,omm);
+%plot(ri,omm);
+plot(ri,oOpm);
 hold off
 
 
