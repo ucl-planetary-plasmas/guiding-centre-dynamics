@@ -56,11 +56,9 @@ K = c.kappa(t);
 br = Br(r,st);
 bt = Bt(r,st);
 b = B(r,st);
-dbdr = D2r(B,r,st);
-dbdt = D2t(B,r,t);
-BxdB = abs(br./r.*dbdt-bt.*dbdr.*dr);
+BxdB = BxgradB(t,c,Br,Bt,B);
 y = ((1-b./Bm).*K./b + .5*BxdB./b.^2/Bm).* ...
-    sqrt(((br./bt).^2+1)./(1-b/Bm))./cos(t);
+    sqrt(((br./bt).^2+1)./(1-b/Bm))./cos(t)/3;
 end
 
 function y=f1(t,c,Bm)

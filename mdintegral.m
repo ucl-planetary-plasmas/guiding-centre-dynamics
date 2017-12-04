@@ -311,6 +311,7 @@ plot(bd,phid,'--')
 hold on
 plot(bm,phim);
 hold off
+xlabel('\alpha_{eq}')
 
 fprintf(1,'Press return\n');
 pause
@@ -360,6 +361,7 @@ plot(ri,phid,'--')
 hold on
 plot(ri,phim);
 hold off
+xlabel('r_{eq}')
 
 fprintf(1,'Press return\n');
 pause
