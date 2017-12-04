@@ -376,9 +376,9 @@ cd = getMFc(s,'d',r);
 ce = getMFcd(s,'d',r);
 cm = getMFc(s,'m',r);
 
-omdc = Omegadc(r,beta); figure
-omc = Omegac(s,ce,beta);
-omdg = Omegadg(r,beta);
+omdc = Omegadc(r,beta); %figure
+omc = Omegac(s,ce,beta); %figure
+omdg = Omegadg(r,beta); figure
 omg = Omegag(s,ce,beta);
 omd  = Omegad(r,beta);
 om = Omega(s,ce,beta);

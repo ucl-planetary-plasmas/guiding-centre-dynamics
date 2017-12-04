@@ -44,7 +44,7 @@ I = zeros(size(beta));
 for i=1:length(beta),
   %fprintf(1,'lm=%f\n', lm(i));
 	t = linspace(0,lm(i),100);
-	clf, plot(t,f(t,c,Bm(i)),'-o'),title('\Omega'); pause
+	%clf, plot(t,f(t,c,Bm(i)),'-o'),title('\Omega'); pause
   I(i) = integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:},'Waypoints',lm(i));
 end
 
@@ -57,8 +57,8 @@ br = Br(r,st);
 bt = Bt(r,st);
 b = B(r,st);
 BxdB = BxgradB(t,c,Br,Bt,B);
-y = ((1-b./Bm).*K./b + .5*BxdB./b.^2/Bm).* ...
-    sqrt(((br./bt).^2+1)./(1-b/Bm))./cos(t)/3;
+y = ((1-b./Bm).*(K./b) + .5*BxdB./(b.^2*Bm)).* ...
+    sqrt((1+(br./bt).^2)./(1-b/Bm))./cos(t)/3;
 end
 
 function y=f1(t,c,Bm)

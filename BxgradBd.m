@@ -1,5 +1,6 @@
-function BxdB = BxgradBd(t,c,Br,Bt,B)
+function BxdB = BxgradBd(t,r)
 
-BxdB = cos(t).^3.*(1+sin(t).^2)./(1+3*sin(t).^2).^2;
+% obs expression for BxgradB/(\omega_gB) not BxgradB!
+BxdB = 3*r.^2.*cos(t).^5.*(1+sin(t).^2)./(1+3*sin(t).^2).^2;
 
 
