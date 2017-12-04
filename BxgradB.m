@@ -8,9 +8,9 @@ br = Br(r,st);
 bt = Bt(r,st);
 b = B(r,st);
 
-dbdr = D2r(B,r,st);
-dbdt = D2t(B,r,t);
+gradBr = D2r(B,r,st);
+gradBt = 1./r.*D2t(B,r,t);
 
-BxdB = abs(br./r.*dbdt-bt.*dbdr.*dr);
+BxdB = abs(br.*gradBt - bt.*gradBr);
 
 
