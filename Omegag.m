@@ -45,7 +45,7 @@ I = zeros(size(beta));
 for i=1:length(beta),
   %fprintf(1,'lm=%f\n', lm(i));
 	t = linspace(0,lm(i),100); 
-	%BxdB = BxgradB(t,c,Br,Bt,B,Bm); BxdBd = BxgradBd(t,c.r0);
+	BxdB = BxgradB(t,c,Br,Bt,B); BxdBd = BxgradBd(t,c.r0);
 	%clf, plot(t,BxdB,'-o'), title('BxgradB'); pause
 	%clf, plot(t,f(t,c,Bm(i)),'-o'),title('\Omega_g'); pause
   I(i) = integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:},'Waypoints',lm(i));
