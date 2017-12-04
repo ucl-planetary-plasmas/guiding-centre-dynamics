@@ -52,9 +52,12 @@ c.tmx = asin(c.mx);
 % regular grid in latitude odd number to catch zero latitude
 c.nrt = 2*fix(c.nr/16)+1;
 ti = linspace(c.tmn,c.tmx,c.nrt);
-c.rt = griddedInterpolant(ti,c.r(sin(ti)),opts{:});
+%c.rt = griddedInterpolant(ti,c.r(sin(ti)),opts{:});
+c.rt = griddedInterpolant(ti,Req*cos(ti).^2,opts{:});
 
 c.drt = griddedInterpolant(ti,Dct(c.rt,ti),opts{:});
+%c.drt = griddedInterpolant(ti,-2*Req*cos(ti).*sin(ti),opts{:});
+
 %c.d2rtt = griddedInterpolant(ti,Dctt(c.rt,ti),opts{:});
 c.d2rtt = griddedInterpolant(ti,Dct(c.drt,ti),opts{:});
 

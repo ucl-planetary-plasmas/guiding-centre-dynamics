@@ -99,7 +99,7 @@ subplot(233)
 plot(ti,D1tt(c1d.r,ti),ti,D1tt(c1m.r,ti),...
      ti,Dctt(c1d.rt,ti),ti,Dctt(c1m.rt,ti),...
 		 ti,c1d.d2rtt(ti),ti,c1m.d2rtt(ti),...
-		 ti,c1e.d2rtt(ti),'k:')
+		 ti,c1e.d2rtt(ti),'k')
 subplot(234),
 h=polarplot(ti,c2d.rt(ti),ti,c2m.rt(ti),ti,c2e.rt(ti));
 set(h(end),'Color','k','LineStyle',':');
@@ -279,6 +279,7 @@ nb = 10;
 phid = zeros(length(ri),nb);
 phim = zeros(length(ri),nb);
 phie = zeros(length(ri),nb);
+phia = zeros(length(ri),nb);
 
 % use loss cone of smaller r as smallest pitch angle
 bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
@@ -291,6 +292,7 @@ for i=1:length(ri),
 	phie(i,:) = Phid(ri(i),bd);
   cm{i} = getMFc(s,'m',ri(i));
 	phim(i,:) = Phi(s,cm{i},bm);
+	phia(i,:) = Phia(ri(i),bd);
 end
 
 co = [0 0 1;
@@ -301,6 +303,7 @@ subplot(211),
 plot(bd,phid,'--')
 hold on
 plot(bd,phie);
+plot(bd,phia,':');
 hold off
 
 subplot(212), 
@@ -324,6 +327,7 @@ nb = 4;
 phid = zeros(length(ri),nb);
 phim = zeros(length(ri),nb);
 phie = zeros(length(ri),nb);
+phia = zeros(length(ri),nb);
 
 % use loss cone of smaller r as smallest pitch angle
 bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
@@ -336,6 +340,7 @@ for i=1:length(ri),
 	phie(i,:) = Phid(ri(i),bd);
   cm{i} = getMFc(s,'m',ri(i));
 	phim(i,:) = Phi(s,cm{i},bm);
+	phia(i,:) = Phia(ri(i),bd);
 end
 
 co = [0 0 1;
@@ -347,6 +352,7 @@ subplot(211),
 plot(ri,phid,'--')
 hold on
 plot(ri,phie);
+plot(ri,phia,':');
 hold off
 
 subplot(212), 
@@ -376,6 +382,8 @@ omd  = Omegad(r,beta);
 om = Omega(s,ce,beta);
 fprintf(1,'%f ',1/r^2*[omdc,omdg,omd,omdc+omdg/2]);
 fprintf(1,'\n');
+fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg/2]);
+fprintf(1,'\n');
 
 omc = Omegac(s,cd,beta);
 omg = Omegag(s,cd,beta);
@@ -383,8 +391,6 @@ om = Omega(s,cd,beta);
 fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg/2]);
 fprintf(1,'\n');
 
-fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg/2]);
-fprintf(1,'\n');
 
 fprintf(1,'Press return\n');
 pause
