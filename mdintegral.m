@@ -386,15 +386,15 @@ omdg = Omegadg(r,beta); %figure
 omg = Omegag(s,ce,beta);
 omd  = Omegad(r,beta);
 om = Omega(s,ce,beta);
-fprintf(1,'%f ',1/r^2*[omdc,omdg,omd,omdc+omdg/2]);
+fprintf(1,'%f ',1/r^2*[omdc,omdg,omd,omdc+omdg]);
 fprintf(1,'\n');
-fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg/2]);
+fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg]);
 fprintf(1,'\n');
 
 omc = Omegac(s,cd,beta);
 omg = Omegag(s,cd,beta);
 om = Omega(s,cd,beta);
-fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg/2]);
+fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg]);
 fprintf(1,'\n');
 
 

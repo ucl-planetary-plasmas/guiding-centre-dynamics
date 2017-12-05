@@ -59,7 +59,7 @@ br = Br(r,st);
 bt = Bt(r,st);
 b = B(r,st);
 BxdB = BxgradB(t,c,Br,Bt,B);
-y = BxdB./(b.^2.*Bm).*sqrt((1+(br./bt).^2)./(1-b/Bm))./cos(t)/3;
+y = BxdB./(b.^2.*Bm).*sqrt((1+(br./bt).^2)./(1-b/Bm))./cos(t)/2/3;
 end
 
 function y=f1(t,c,Bm)
