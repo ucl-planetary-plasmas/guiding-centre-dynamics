@@ -9,11 +9,11 @@ switch lower(mftype),
 
   case {'m','md','mdisc'},
 
-  I = r.*(0.40-0.06*sin(beta)+0.04.*r.*sin(beta));
+  I = (0.40-0.06*sin(beta)+0.04.*r.*sin(beta));
 
   otherwise
 
-    error('magnetic field type mftype not recognised',mftype)
+  error('magnetic field type mftype not recognised',mftype)
 
 end
 

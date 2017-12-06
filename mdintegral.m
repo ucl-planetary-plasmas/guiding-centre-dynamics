@@ -281,6 +281,7 @@ phid = zeros(length(ri),nb);
 phim = zeros(length(ri),nb);
 phie = zeros(length(ri),nb);
 phia = zeros(length(ri),nb);
+phib = zeros(length(ri),nb);
 
 % use loss cone of smaller r as smallest pitch angle
 bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
@@ -296,6 +297,7 @@ for i=1:length(ri),
 
 	phie(i,:) = Phid(ri(i),bd);
 	phia(i,:) = Phia('d',ri(i),bd);
+	phib(i,:) = Phia('m',ri(i),bm);
 end
 
 co = [0 0 1;
@@ -313,6 +315,7 @@ subplot(212),
 plot(bd,phid,'--')
 hold on
 plot(bm,phim);
+plot(bm,phib,':');
 hold off
 xlabel('\alpha_{eq}')
 
@@ -332,6 +335,7 @@ phid = zeros(length(ri),nb);
 phim = zeros(length(ri),nb);
 phie = zeros(length(ri),nb);
 phia = zeros(length(ri),nb);
+phib = zeros(length(ri),nb);
 
 % use loss cone of smaller r as smallest pitch angle
 bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
@@ -347,6 +351,7 @@ for i=1:length(ri),
 
 	phie(i,:) = Phid(ri(i),bd);
 	phia(i,:) = Phia('d',ri(i),bd);
+	phib(i,:) = Phia('m',ri(i),bm);
 end
 
 co = [0 0 1;
@@ -365,6 +370,7 @@ subplot(212),
 plot(ri,phid,'--')
 hold on
 plot(ri,phim);
+plot(ri,phib,':');
 hold off
 xlabel('r_{eq}')
 
@@ -423,6 +429,7 @@ oOpd = zeros(length(ri),nb);
 oOpm = zeros(length(ri),nb);
 oOpe = zeros(length(ri),nb);
 oOpa = zeros(length(ri),nb);
+oOpb = zeros(length(ri),nb);
 
 % use loss cone of smaller r as smallest pitch angle
 bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
@@ -445,6 +452,7 @@ for i=1:length(ri),
   ome(i,:) = Omegad(ri(i),bd);
 
 	oOpa(i,:) = OmegaOverPhia('d',ri(i),bd);
+	oOpb(i,:) = OmegaOverPhia('m',ri(i),bm);
 end
 
 oOpd = (omd./phid)./Ri;
@@ -470,6 +478,7 @@ plot(bd,oOpd,'--')
 hold on
 %plot(bm,omm);
 plot(bm,oOpm);
+plot(bm,oOpb,':');
 hold off
 
 fprintf(1,'Press return\n');
@@ -496,6 +505,7 @@ oOpd = zeros(length(ri),nb);
 oOpm = zeros(length(ri),nb);
 oOpe = zeros(length(ri),nb);
 oOpa = zeros(length(ri),nb);
+oOpb = zeros(length(ri),nb);
 
 % use loss cone of smaller r as smallest pitch angle
 bmnd = getLC(s,getMFc(s,'d',ri(1)))+EPS;
@@ -518,6 +528,7 @@ for i=1:length(ri),
   ome(i,:) = Omegad(ri(i),bd);
 
 	oOpa(i,:) = OmegaOverPhia('d',ri(i),bd);
+	oOpb(i,:) = OmegaOverPhia('m',ri(i),bm);
 end
 
 oOpd = (omd./phid)./Ri.^2;
@@ -525,6 +536,7 @@ oOpm = (omm./phim)./Ri.^2;
 oOpe = (ome./phie)./Ri.^2;
 
 oOpa = oOpa./Ri;
+oOpb = oOpb./Ri;
 
 co = [0 0 1;
       0 0.5 0;
@@ -546,6 +558,7 @@ plot(ri,oOpd,'--')
 hold on
 %plot(ri,omm);
 plot(ri,oOpm);
+plot(ri,oOpb,':');
 hold off
 
 
