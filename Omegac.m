@@ -44,7 +44,7 @@ I = zeros(size(beta));
 for i=1:length(beta),
   %fprintf(1,'lm=%f\n', lm(i));
 	t = linspace(0,lm(i),100);
-	%clf, plot(t,c.kappa(t),'-o',t,Kappad(t,c.r0)),title('\kappa'); pause
+	%clf, plot(t,c.kappa(t),'-o',t,Kappad(c.r0,t)),title('\kappa'); pause
 	%clf, plot(t,c.kappa(t)./B(c.rt(t),sin(t)),'-o'),title('\kappa/B'); pause
 	%clf, plot(t,f(t,c,Bm(i)),'-o'),title('\Omega_c'); pause
   I(i) = integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:},'Waypoints',lm(i));

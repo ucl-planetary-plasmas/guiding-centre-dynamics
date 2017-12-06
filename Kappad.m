@@ -1,4 +1,4 @@
-function k = Kappad(t,L)
+function k = Kappad(L,t)
 
 k = 1.5/L*abs(cos(t).^2.*(-3+cos(2*t)))./ ...
      (cos(t).^2.*(cos(t).^2+4*sin(t).^2)).^1.5;
