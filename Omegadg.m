@@ -2,7 +2,7 @@ function I = Omegadg(r,beta)
 
 opts = {'AbsTol',1e-12,'RelTol',1e-9};
 
-EPS = 1e-12;
+EPS = 1e-10;
 
 % singularity at end point lm
 % f1(lm) can become pure imaginary
