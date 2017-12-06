@@ -295,7 +295,7 @@ for i=1:length(ri),
 	phim(i,:) = Phi(s,cm{i},bm);
 
 	phie(i,:) = Phid(ri(i),bd);
-	phia(i,:) = Phia(ri(i),bd);
+	phia(i,:) = Phia('d',ri(i),bd);
 end
 
 co = [0 0 1;
@@ -346,7 +346,7 @@ for i=1:length(ri),
 	phim(i,:) = Phi(s,cm{i},bm);
 
 	phie(i,:) = Phid(ri(i),bd);
-	phia(i,:) = Phia(ri(i),bd);
+	phia(i,:) = Phia('d',ri(i),bd);
 end
 
 co = [0 0 1;
@@ -444,7 +444,7 @@ for i=1:length(ri),
 	phie(i,:) = Phid(ri(i),bd);
   ome(i,:) = Omegad(ri(i),bd);
 
-	oOpa(i,:) = OmegaOverPhia(ri(i),bd);
+	oOpa(i,:) = OmegaOverPhia('d',ri(i),bd);
 end
 
 oOpd = (omd./phid)./Ri;
@@ -517,7 +517,7 @@ for i=1:length(ri),
 	phie(i,:) = Phid(ri(i),bd);
   ome(i,:) = Omegad(ri(i),bd);
 
-	oOpa(i,:) = OmegaOverPhia(ri(i),bd);
+	oOpa(i,:) = OmegaOverPhia('d',ri(i),bd);
 end
 
 oOpd = (omd./phid)./Ri.^2;
