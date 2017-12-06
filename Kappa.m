@@ -34,6 +34,8 @@ d2rr = -r.*(-br.^2+dbr.*bt-br.*dbt)./bt.^2;
 
 k = curvature(r,dr,d2rr);
 
+return
+
 % alternative less robust
 dr1 = c.drt(t);
 d2rr1 = c.d2rtt(t);

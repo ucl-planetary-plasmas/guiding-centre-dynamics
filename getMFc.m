@@ -10,11 +10,15 @@ switch lower(mftype),
 
     afun = s.dip.a;
     As = s.MD.v2d.alphadip;
+    Br = s.dip.Br;
+    Bt = s.dip.Bt;
 
 	case {'m','md','mdisc'},
 
     afun = s.md.a;
     As = s.MD.v2d.alpha;
+    Br = s.md.Br;
+    Bt = s.md.Bt;
 
   otherwise
 
@@ -61,18 +65,32 @@ c.tmx = asin(c.mx);
 % regular grid in latitude odd number to catch zero latitude
 c.nrt = 2*fix(c.nr/16)+1;
 ti = linspace(c.tmn,c.tmx,c.nrt);
-%c.rt = griddedInterpolant(ti,c.r(sin(ti)),opts{:});
-c.rt = griddedInterpolant(ti,ds(ti,c.r(sin(ti))),opts{:});
+si = sin(ti);
+ri = c.r(si);
+%c.rt = griddedInterpolant(ti,rsi,opts{:});
+c.rt = griddedInterpolant(ti,ds(ti,ri),opts{:});
 
-c.drt = griddedInterpolant(ti,Dct(c.rt,ti),opts{:});
-c.drt = griddedInterpolant(ti,ds(ti,Dct(c.rt,ti)),opts{:});
+%c.drt = griddedInterpolant(ti,Dct(c.rt,ti),opts{:});
+%c.drt = griddedInterpolant(ti,ds(ti,Dct(c.rt,ti)),opts{:});
+% dr/dt = -r Br/Bt more robust
+ri = c.rt(ti);
+bri = Br(ri,si);
+bti = Bt(ri,si);
+dri = -ri.*bri./bti;
+c.drt = griddedInterpolant(ti,dri,opts{:});
 
 %c.d2rtt = griddedInterpolant(ti,Dctt(c.rt,ti),opts{:});
-c.d2rtt = griddedInterpolant(ti,Dct(c.drt,ti),opts{:});
-c.d2rtt = griddedInterpolant(ti,ds(ti,Dct(c.drt,ti)),opts{:});
+%c.d2rtt = griddedInterpolant(ti,Dct(c.drt,ti),opts{:});
+%c.d2rtt = griddedInterpolant(ti,ds(ti,Dct(c.drt,ti)),opts{:});
+% d2r/dt2 = -r (-Br^2 + dBr/dt Bt - Br dBt/dt)/Bt^2
+dbri = D2t(Br,ri,si);
+dbti = D2t(Bt,ri,si);
+d2rri = -ri.*(-bri.^2+dbri.*bti-bri.*dbti)./bti.^2;
+c.d2rtt = griddedInterpolant(ti,d2rri,opts{:});
+
 
 % curvature
-c.kappa = griddedInterpolant(ti,Kappa(ti,c),opts{:});
+c.kappa = griddedInterpolant(ti,Kappa(s,c,ti),opts{:});
 
 return
 
