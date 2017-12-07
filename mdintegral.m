@@ -312,9 +312,8 @@ plot(bd,phia,':');
 hold off
 
 subplot(212), 
-plot(bd,phid,'--')
-hold on
 plot(bm,phim);
+hold on
 plot(bm,phib,':');
 hold off
 xlabel('\alpha_{eq}')
@@ -367,9 +366,8 @@ plot(ri,phia,':');
 hold off
 
 subplot(212), 
-plot(ri,phid,'--')
-hold on
 plot(ri,phim);
+hold on
 plot(ri,phib,':');
 hold off
 xlabel('r_{eq}')
@@ -387,21 +385,21 @@ cd = getMFc(s,'d',r);
 ce = getMFcd(s,'d',r);
 cm = getMFc(s,'m',r);
 
-omdc = Omegadc(r,beta); %figure
-omc = Omegac(s,ce,beta); %figure
-omdg = Omegadg(r,beta); %figure
+omdc = Omegadc(r,beta);
+omc = Omegac(s,ce,beta); 
+omdg = Omegadg(r,beta); 
 omg = Omegag(s,ce,beta);
 omd  = Omegad(r,beta);
 om = Omega(s,ce,beta);
-fprintf(1,'%f ',1/r^2*[omdc,omdg,omd,omdc+omdg]);
+fprintf(1,'%f ',[omdc,omdg,omd,omdc+omdg]);
 fprintf(1,'\n');
-fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg]);
+fprintf(1,'%f ',[omc,omg,om,omc+omg]);
 fprintf(1,'\n');
 
 omc = Omegac(s,cd,beta);
 omg = Omegag(s,cd,beta);
 om = Omega(s,cd,beta);
-fprintf(1,'%f ',1/r^2*[omc,omg,om,omc+omg]);
+fprintf(1,'%f ',[omc,omg,om,omc+omg]);
 fprintf(1,'\n');
 
 
@@ -455,9 +453,9 @@ for i=1:length(ri),
 	oOpb(i,:) = OmegaOverPhia('m',ri(i),bm);
 end
 
-oOpd = (omd./phid)./Ri;
-oOpm = (omm./phim)./Ri;
-oOpe = (ome./phie)./Ri;
+oOpd = (omd./phid);
+oOpm = (omm./phim);
+oOpe = (ome./phie);
 
 co = [0 0 1;
       0 0.5 0;
@@ -473,11 +471,9 @@ plot(bd,oOpa,':');
 hold off
 
 subplot(212),
-%plot(bd,omd,'--')
-plot(bd,oOpd,'--')
-hold on
 %plot(bm,omm);
 plot(bm,oOpm);
+hold on
 plot(bm,oOpb,':');
 hold off
 
@@ -531,12 +527,9 @@ for i=1:length(ri),
 	oOpb(i,:) = OmegaOverPhia('m',ri(i),bm);
 end
 
-oOpd = (omd./phid)./Ri.^2;
-oOpm = (omm./phim)./Ri.^2;
-oOpe = (ome./phie)./Ri.^2;
-
-oOpa = oOpa./Ri;
-oOpb = oOpb./Ri;
+oOpd = (omd./phid);
+oOpm = (omm./phim);
+oOpe = (ome./phie);
 
 co = [0 0 1;
       0 0.5 0;
@@ -553,11 +546,9 @@ plot(ri,oOpa,':');
 hold off
 
 subplot(212),
-%plot(ri,omd,'--')
-plot(ri,oOpd,'--')
-hold on
 %plot(ri,omm);
 plot(ri,oOpm);
+hold on
 plot(ri,oOpb,':');
 hold off
 
