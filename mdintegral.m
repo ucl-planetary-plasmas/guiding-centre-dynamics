@@ -453,9 +453,9 @@ for i=1:length(ri),
 	oOpb(i,:) = OmegaOverPhia('m',ri(i),bm);
 end
 
-oOpd = (omd./phid);
-oOpm = (omm./phim);
-oOpe = (ome./phie);
+oOpd = omd./phid;
+oOpm = omm./phim;
+oOpe = ome./phie;
 
 co = [0 0 1;
       0 0.5 0;
@@ -527,9 +527,9 @@ for i=1:length(ri),
 	oOpb(i,:) = OmegaOverPhia('m',ri(i),bm);
 end
 
-oOpd = (omd./phid);
-oOpm = (omm./phim);
-oOpe = (ome./phie);
+oOpd = omd./phid;
+oOpm = omm./phim;
+oOpe = ome./phie;
 
 co = [0 0 1;
       0 0.5 0;
