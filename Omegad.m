@@ -22,7 +22,7 @@ for i=1:length(beta),
 	%fprintf(1,'lm=%f\n', lm(i));
   t = linspace(0,lm(i),100); 
 	%clf, plot(t,f(t,r,beta(i)),'-o'),title('\Omega_d'); pause
-  I(i) = r.^2*integral(@(t)f(t,r,beta(i)),0,lm(i),opts{:},'Waypoints',lm(i));
+  I(i) = integral(@(t)f(t,r,beta(i)),0,lm(i),opts{:},'Waypoints',lm(i));
 end
 
 function y=f(t,r,b)

@@ -48,7 +48,7 @@ for i=1:length(beta),
 	BxdB = BxgradB(t,c,Br,Bt,B); BxdBd = BxgradBd(t,c.r0);
 	%clf, plot(t,BxdB,'-o'), title('BxgradB'); pause
 	%clf, plot(t,f(t,c,Bm(i)),'-o'),title('\Omega_g'); pause
-  I(i) = integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:},'Waypoints',lm(i));
+  I(i) = 1/c.r0.^2*integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:},'Waypoints',lm(i));
 end
 
 function y=f(t,c,Bm)

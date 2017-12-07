@@ -47,7 +47,7 @@ for i=1:length(beta),
 	%clf, plot(t,c.kappa(t),'-o',t,Kappad(c.r0,t)),title('\kappa'); pause
 	%clf, plot(t,c.kappa(t)./B(c.rt(t),sin(t)),'-o'),title('\kappa/B'); pause
 	%clf, plot(t,f(t,c,Bm(i)),'-o'),title('\Omega_c'); pause
-  I(i) = integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:},'Waypoints',lm(i));
+  I(i) = 1/c.r0.^2*integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:},'Waypoints',lm(i));
 end
 
 function y=f(t,c,Bm)

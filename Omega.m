@@ -45,7 +45,7 @@ for i=1:length(beta),
   %fprintf(1,'lm=%f\n', lm(i));
 	t = linspace(0,lm(i),100);
 	%clf, plot(t,f(t,c,Bm(i)),'-o'),title('\Omega'); pause
-  I(i) = integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:},'Waypoints',lm(i));
+  I(i) = 1/c.r0.^2*integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:},'Waypoints',lm(i));
 end
 
 function y=f(t,c,Bm)

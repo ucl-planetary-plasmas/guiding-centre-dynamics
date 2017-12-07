@@ -23,7 +23,7 @@ for i=1:length(beta),
   t = linspace(0,lm(i),100); 
 	%clf, plot(t,real(f(t,r,beta(i))),'-o',t,imag(f(t,r,beta(i))),'-o'),
 	%clf, plot(t,f(t,r,beta(i)),'-o'), title('\Omega_{dg}'); pause
-  I(i) = r.^2*integral(@(t)f(t,r,beta(i)),0,lm(i),opts{:},'Waypoints',lm(i));
+  I(i) = integral(@(t)f(t,r,beta(i)),0,lm(i),opts{:},'Waypoints',lm(i));
 end
 
 
