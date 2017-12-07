@@ -4,12 +4,16 @@ switch lower(mftype),
 
   case {'d','dip','dipole'},
  
-  %I = (0.35+0.15*sin(beta));
-  I = (0.347714+0.152138*sin(beta));
+  % From mathematica mdintegral.nb
+  %I = (0.347714+0.152138*sin(beta));
+
+	% From 2D fit
+  I = 0.35+0.14*sin(beta);
 
   case {'m','md','mdisc'},
 
-  I = (0.40-0.06*sin(beta)+0.04.*r.*sin(beta));
+  % From 2D fit
+  I = 0.40-0.06*sin(beta)+0.04.*r.*sin(beta);
 
   otherwise
 

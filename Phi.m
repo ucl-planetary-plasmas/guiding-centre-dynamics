@@ -28,7 +28,7 @@ Bm = B(c.rt(lm),sin(lm));
 
 I = zeros(size(beta));
 for i=1:length(beta),
-  I(i) = integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:});
+  I(i) = 1/c.r0*integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:});
 end
 
 function y=f(t,c,Bm)

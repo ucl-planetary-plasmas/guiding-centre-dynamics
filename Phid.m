@@ -6,7 +6,7 @@ lm = getLatMPd(r,beta);
 
 I = zeros(size(beta));
 for i=1:length(beta),
-  I(i) = r*integral(@(t)f(t,r,beta(i)),0,lm(i),opts{:});
+  I(i) = integral(@(t)f(t,r,beta(i)),0,lm(i),opts{:});
 end
 
 function y=f(t,r,b)
