@@ -3,7 +3,8 @@ function Lmd = getLmd(s,L)
 %opts = {'linear','extrap'};
 %opts = {'spline','extrap'};
 %opts = {'cubic','extrap'};
-opts = {'makima','extrap'};
+%opts = {'makima','extrap'};
+opts = {'makima'};
 
 %tic
 % potential profile alpha for dipole at equator sampled at L
