@@ -2,7 +2,7 @@ function df = D2t(fun,r,s)
 % function df = D2t(fun,r,s)
 
 %
-% $Id: D2t.m,v 1.4 2018/06/14 15:01:07 patrick Exp $
+% $Id: D2t.m,v 1.5 2019/02/11 17:43:27 patrick Exp $
 %
 % Copyright (c) 2018 Patrick Guio <patrick.guio@gmail.com>
 % All Rights Reserved.
@@ -21,7 +21,7 @@ function df = D2t(fun,r,s)
 % along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 EPS = 1e-6;
-EPS = 1e-1;
+EPS = 1e-3;
 
 % if s = sin(t)
 ds = EPS*s;
