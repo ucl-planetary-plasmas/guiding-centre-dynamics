@@ -4,7 +4,7 @@ function Lmd = getLmd(s,L)
 %opts = {'spline','extrap'};
 %opts = {'cubic','extrap'};
 %opts = {'makima','extrap'};
-opts = {'makima'};
+opts = {'makima',NaN};
 
 %tic
 % potential profile alpha for dipole at equator sampled at L
@@ -19,6 +19,10 @@ Lmd = zeros(size(L));
 % inverse mapping 
 % given Li(aLi) for mdisc, interpolate Lmd for value of dipole alpha at L
 Lmd = interp1(aLi,Li,adipL,opts{:});
+ii = find(adipL < min(aLi) | adipL > max(aLi));
+if ~isempty(ii),
+  warning('L larger than allowed');
+end
 %toc
 
 return
@@ -43,7 +47,10 @@ for i=1:length(L),
 end
 toc
 
+%Lmd=Lmd1;
+%return
+
 clf
-subplot(211), plot(L,Lmd,L,Lmd)
+subplot(211), plot(L,Lmd,L,Lmd1)
 subplot(212), plot(L,Lmd-Lmd1)
 pause
