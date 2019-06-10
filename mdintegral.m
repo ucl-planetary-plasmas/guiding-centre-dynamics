@@ -2,7 +2,7 @@ function mdintegral(mdiscfile)
 % function mdintegral(mdiscfile)
 
 %
-% $Id: mdintegral.m,v 1.25 2018/06/14 15:12:17 patrick Exp $
+% $Id: mdintegral.m,v 1.26 2019/06/10 14:25:42 patrick Exp $
 %
 % Copyright (c) 2018 Patrick Guio <patrick.guio@gmail.com>
 % All Rights Reserved.
@@ -38,15 +38,15 @@ plot7(s,c1d,c2d,c1m,c2m)
 
 plot8(s)
 
-plot9(s)
+plot9(s,mdiscfile)
 
-plot10(s)
+plot10(s,mdiscfile)
 
 plot11(s)
 
-plot12(s)
+plot12(s,mdiscfile)
 
-plot13(s)
+plot13(s,mdiscfile)
 
 
 function plot1(s)
@@ -289,7 +289,7 @@ fprintf(1,'Press return\n');
 
 pause
 
-function plot9(s)
+function plot9(s,planet)
 
 fprintf(1,'plot9\n');
 
@@ -316,8 +316,8 @@ for i=1:length(ri),
 	phim(i,:) = Phi(s,cm{i},bm);
 
 	phie(i,:) = Phid(ri(i),bd);
-	phia(i,:) = Phia('d',ri(i),bd);
-	phib(i,:) = Phia('m',ri(i),bm);
+	phia(i,:) = Phia('d',ri(i),bd,planet);
+	phib(i,:) = Phia('m',ri(i),bm,planet);
 end
 
 co = [0 0 1;
@@ -341,7 +341,7 @@ xlabel('\alpha_{eq}')
 fprintf(1,'Press return\n');
 pause
 
-function plot10(s)
+function plot10(s,planet)
 
 fprintf(1,'plot10\n');
 
@@ -369,8 +369,8 @@ for i=1:length(ri),
 	phim(i,:) = Phi(s,cm{i},bm);
 
 	phie(i,:) = Phid(ri(i),bd);
-	phia(i,:) = Phia('d',ri(i),bd);
-	phib(i,:) = Phia('m',ri(i),bm);
+	phia(i,:) = Phia('d',ri(i),bd,planet);
+	phib(i,:) = Phia('m',ri(i),bm,planet);
 end
 
 co = [0 0 1;
@@ -469,8 +469,8 @@ for i=1:length(ri),
 	phie(i,:) = Phid(ri(i),bd);
   ome(i,:) = Omegad(ri(i),bd);
 
-	oOpa(i,:) = OmegaOverPhia('d',ri(i),bd);
-	oOpb(i,:) = OmegaOverPhia('m',ri(i),bm);
+	oOpa(i,:) = OmegaOverPhia('d',ri(i),bd,planet);
+	oOpb(i,:) = OmegaOverPhia('m',ri(i),bm,planet);
 end
 
 oOpd = omd./phid;
@@ -543,8 +543,8 @@ for i=1:length(ri),
 	phie(i,:) = Phid(ri(i),bd);
   ome(i,:) = Omegad(ri(i),bd);
 
-	oOpa(i,:) = OmegaOverPhia('d',ri(i),bd);
-	oOpb(i,:) = OmegaOverPhia('m',ri(i),bm);
+	oOpa(i,:) = OmegaOverPhia('d',ri(i),bd,planet);
+	oOpb(i,:) = OmegaOverPhia('m',ri(i),bm,planet);
 end
 
 oOpd = omd./phid;

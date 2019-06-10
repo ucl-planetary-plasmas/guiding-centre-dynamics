@@ -1,8 +1,8 @@
-function I = Phia(mftype,r,beta)
-% function I = Phia(mftype,r,beta)
+function I = Phia(mftype,r,beta,planet)
+% function I = Phia(mftype,r,beta,planet)
 
 %
-% $Id: Phia.m,v 1.4 2018/06/14 14:54:03 patrick Exp $
+% $Id: Phia.m,v 1.5 2019/06/10 14:25:42 patrick Exp $
 %
 % Copyright (c) 2018 Patrick Guio <patrick.guio@gmail.com>
 % All Rights Reserved.
@@ -33,8 +33,15 @@ switch lower(mftype),
 
 	case {'m','md','mdisc'},
 
-  % From 2D fit
-  I = 1.27-0.37*sin(beta)-0.05.*r.*sin(beta);
+  if strfind(lower(planet),'jup'),
+	  % From 2D fit Jupiter
+    I = 1.27-0.37*sin(beta)-0.05.*r.*sin(beta);
+  elseif strfind(lower(planet),'sat'), 
+	  % From 2D fit Saturn
+    I = 1.28-0.48*sin(beta)-0.04.*r.*sin(beta);
+	else
+	  error('planet not recognised',planet)
+	end
 
   otherwise
 
