@@ -2,7 +2,7 @@ function I = Phi(s,c,beta)
 % function I = Phi(s,c,beta)
 
 %
-% $Id: Phi.m,v 1.3 2018/06/14 14:54:03 patrick Exp $
+% $Id: Phi.m,v 1.4 2019/07/16 16:05:01 patrick Exp $
 %
 % Copyright (c) 2018 Patrick Guio <patrick.guio@gmail.com>
 % All Rights Reserved.
@@ -43,10 +43,18 @@ switch lower(c.type),
 
 end
 
+I = zeros(size(beta));
+
+% code for pitch angle around 90 deg
+%ii = find(abs(beta-pi/2)<=1e-3);
+%if ~isempty(ii),
+%  I(ii) = pi/sqrt(2)./c.r0./c.kappa(0);
+%end
+
 lm = getLatMP(s,c,beta);
 Bm = B(c.rt(lm),sin(lm));
-
-I = zeros(size(beta));
+%ii = find(abs(beta-pi/2)>1e-3);
+%for i=ii,
 for i=1:length(beta),
   I(i) = 1/c.r0*integral(@(t)f(t,c,Bm(i)),0,lm(i),opts{:});
 end
