@@ -2,7 +2,7 @@ function Lmd = getLmd(s,L)
 % function Lmd = getLmd(s,L)
 
 %
-% $Id: getLmd.m,v 1.6 2019/07/16 14:30:02 patrick Exp $
+% $Id: getLmd.m,v 1.7 2019/07/16 16:02:01 patrick Exp $
 %
 % Copyright (c) 2019 Patrick Guio <patrick.guio@gmail.com>
 % All Rights Reserved.
@@ -28,20 +28,30 @@ opts = {'makima',NaN};
 
 %tic
 % potential profile alpha for dipole at equator sampled at L
-adipL = interp2(s.MD.c2d.r,s.MD.c2d.mu,s.MD.v2d.alphadip,L,zeros(size(L)));
+%adipL = interp2(s.MD.c2d.r,s.MD.c2d.mu,s.MD.v2d.alphadip,L,zeros(size(L)));
+adipL = interp1(s.MD.dims.r,s.MD.v2d.alphadip(s.MD.dims.imu0,:),L,opts{:});
 
 % highly sampled equatorial distances
 Li = linspace(s.MD.dims.r(1),s.MD.dims.r(end),s.MD.param.nr);
 % potential profile alpha for mdisc at equator highly sampled
-aLi = interp2(s.MD.c2d.r,s.MD.c2d.mu,s.MD.v2d.alpha,Li,zeros(size(Li)));
+%aLi = interp2(s.MD.c2d.r,s.MD.c2d.mu,s.MD.v2d.alpha,Li,zeros(size(Li)));
+aLi = interp1(s.MD.dims.r,s.MD.v2d.alpha(s.MD.dims.imu0,:),Li,opts{:});
 
 Lmd = zeros(size(L));
 % inverse mapping 
 % given Li(aLi) for mdisc, interpolate Lmd for value of dipole alpha at L
 Lmd = interp1(aLi,Li,adipL,opts{:});
-ii = find(adipL < min(aLi) | adipL > max(aLi));
+%ii = find(adipL < min(aLi) | adipL > max(aLi));
+ii = find(~isfinite(Lmd));
 if ~isempty(ii),
-  warning('L larger than allowed');
+  % Assuming L monotonic increasing, Lmax ~ average of L(ii) and L(ii-1) 
+  % where ii is the index of the first NaN value of Lmd, i.e. adipL outside the 
+  % interpolating range of aLi.
+  if ii(1)>1, % There is a value below Lmax
+    fprintf(1,'Warning: L values larger than Lmax ~ %f\n', mean(L(ii(1)+[-1,0])));
+  else, % There is not
+    fprintf(1,'Warning: L values larger than Lmax < %f\n', L(ii(1)));
+  end
 end
 %toc
 
