@@ -34,7 +34,7 @@ filename = 'particles.mat';
 en = [-1, 5.486e-4];% 5.48579909065(16)×10−4 Da==u==uma
 hp = [1, 1];
 h2p = [1, 2];
-wp = [1, 18];%first rough approx, cf wilson2015 for better approximation
+wp = [1, 17.6];%approx from wilson2015, in Sittler 2006 ranges
 op = [1, 16];
 opp = [2, 16];
 ohp = [1, 17];
