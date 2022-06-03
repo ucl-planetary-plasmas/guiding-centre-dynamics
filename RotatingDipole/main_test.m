@@ -15,6 +15,19 @@ c.distrib.E0 = ec86;
 a0mx = pi/2-1e-1;
 na0 = 10;
 c.distrib.a0 = [a0mx, na0];
+
+% % Corotation energy vs Temperature energy
+% erot = corotationenergy(c);
+% figure('Name', 'Erot vs Etemp')
+% hold on
+% plot(L, ec86, 'DisplayName', 'Etemp')
+% plot(L, j2ev(erot), 'DisplayName', 'Ecorot')
+% xlabel('L')
+% ylabel('E [eV]')
+% set(gca, 'YScale', 'log')
+% legend
+% hold off
+
 % Computation
 [toms, params, mults, ints, intsnr] = timesofmotion(c);
 
