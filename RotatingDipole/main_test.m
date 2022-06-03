@@ -31,6 +31,12 @@ c.distrib.a0 = [a0mx, na0];
 % Computation
 [toms, params, mults, ints, intsnr] = timesofmotion(c);
 
+% v_D limits
+vdeq = (3+2.*params.b0.rot).*(0.5.*c.distrib.E0.*c.distrib.L.^2)./...
+    (c.particle(1).*c.planet(1).*c.planet(2));
+taudvd = mults.D.*(2./(3+2.*params.b0.rot));
+taudvdnr = mults.D.*(2/3);
+
 
 %% Quick visu of the results obtained
 
@@ -267,4 +273,23 @@ set(gca, 'YScale', 'log')
 legend
 grid on
 hold off
+
+% tau_d for fixed L
+figure('Name', 'td only L fixed')
+hold on
+plot(a0(1,:), tdnr(1, :), '*-', 'DisplayName', 'no rot L=5')
+plot(a0(1,:), tdnr(end, :), 'o-', 'DisplayName', 'no rot L=10')
+plot(pi/2, taudvdnr(1), '*', 'DisplayName', 'no rot, taudvd L=5', 'MarkerSize', 8)
+plot(pi/2, taudvdnr(end), 'o', 'DisplayName', 'no rot taudvd L=10', 'MarkerSize', 8)
+plot(a0(2,:), td(2, :), '+-', 'DisplayName', 'rot, L=5', 'Linewidth', 2)
+plot(a0(end,:), td(end, :), 'x-', 'DisplayName', 'rot, L=10', 'LineWidth', 2)
+plot(pi/2, taudvd(1), '+', 'DisplayName', 'taudvd, L=5', 'MarkerSize', 8,'Linewidth', 2)
+plot(pi/2, taudvd(end), 'x', 'DisplayName', 'taudvd, L=10', 'MarkerSize', 8,'Linewidth', 2)
+xlabel('\alpha_0 [ ]')
+ylabel('\tau_d [s]')
+set(gca, 'YScale', 'log')
+legend('Location', 'NorthWest')
+grid on 
+hold off
+
 
