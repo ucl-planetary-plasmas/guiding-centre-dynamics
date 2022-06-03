@@ -1,4 +1,5 @@
-close all; clear all;
+clear all;
+% close all; 
 % Main (after the add of the b0 case)
 
 % Initialisation
@@ -6,12 +7,15 @@ load('planets.mat', 'Jupiter');
 c.planet = [Jupiter.Rp{1}, Jupiter.Bp{1}, Jupiter.Op{1}];
 load('particles.mat')
 c.particle = wp;
+% c.particle = en;
 nL =50;
 L = linspace(5, 10, nL);
 c.distrib.L = L;
 c.distrib.subcorot = 0.8; %=1 == rigid rotation
 ec86 = caudal86cold(L);
 c.distrib.E0 = ec86;
+% eb94te = bagenal94thelec(L);
+% c.distrib.E0 = eb94te;
 a0mx = pi/2-1e-1;
 na0 = 10;
 c.distrib.a0 = [a0mx, na0];
@@ -29,7 +33,7 @@ c.distrib.a0 = [a0mx, na0];
 % hold off
 
 % Computation
-[toms, params, mults, ints, intsnr] = timesofmotion(c);
+[toms, params, mults, ints, intsnr, vd0s] = timesofmotion(c);
 
 % v_D limits
 vdeq = (3+2.*params.b0.rot).*(0.5.*c.distrib.E0.*c.distrib.L.^2)./...
@@ -40,9 +44,9 @@ taudvdnr = mults.D.*(2/3);
 
 %% Quick visu of the results obtained
 
-figure('Name', 'al')
-plot(L, params.al.rot, '+-');hold on;
-plot(L, params.al.norot, 'kx-'); hold on;
+% figure('Name', 'al')
+% plot(L, params.al.rot, '+-');hold on;
+% plot(L, params.al.norot, 'kx-'); hold on;
 
 figure('Name', 'E0(L)')
 plot(params.case.distrib.L, ...
@@ -211,7 +215,7 @@ plot(L, tdnr(:, end), 'x-', 'DisplayName', 'no rot, a0max')
 plot(L, tdcg(:, 1), '+-', 'DisplayName', 'rot, a0min')
 plot(L, tdcg(:, end), 'x-', 'DisplayName', 'rot, a0max')
 plot(L, mults.D, 'DisplayName', 'D')
-plot(L, 300.*params.b0.rot,'DisplayName', '300*b0(L, E0)')
+% plot(L, 300.*params.b0.rot,'DisplayName', '300*b0(L, E0)')
 set(gca, 'YScale', 'log')
 legend
 grid on
@@ -292,4 +296,22 @@ legend('Location', 'NorthWest')
 grid on 
 hold off
 
+%% Drift velocities at the equator (vd0s) 
 
+vd0 = reshape(vd0s.vd0(1, :, :), [nL,na0]);
+vd0cg = reshape(vd0s.vd0cg(1, :, :), [nL,na0]);
+% vd0s.vd0cf
+% vdeq
+
+figure('Name', 'vdos')
+hold on
+plot(L, vd0(:, 2),'DisplayName', 'rot, a0min')
+plot(L, vd0(:, end),'DisplayName', 'rot, a0max')
+plot(L, vdeq,'DisplayName', 'rot, a0=pi/2') 
+plot(L, vd0cg(:,2),'--','DisplayName', 'CG: rot, a0min')
+plot(L, vd0(:, end),'--','DisplayName', 'CG: rot, a0min')
+plot(L, vd0s.vd0cf,'-.','DisplayName', 'CF:rot, a0min')
+% set(gca, 'YScale', 'log')
+legend('location', 'northwest')
+grid on
+hold off

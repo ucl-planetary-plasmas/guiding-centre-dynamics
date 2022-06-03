@@ -1,4 +1,4 @@
-function [toms, params, mults, ints, intsnr] = timesofmotion(c)
+function [toms, params, mults, ints, intsnr, vd0s] = timesofmotion(c)
 % toms = timesofmotion(c)
 % Description:
 % Compute the times of motion:
@@ -23,6 +23,7 @@ b0 = computebeta0(c);
 al = computealphaloss(b0, c.distrib.L);
 % c.distrib.a0 = [a0mx, na0];
 [ints, alpha0] = integrals(al, b0,c.distrib.a0(1), c.distrib.a0(2));
+vd0s = driftvelocities(c, alpha0, b0);
 
 % w/o rotation (b0 = 0)
 alnr = computealphaloss(0, c.distrib.L);
