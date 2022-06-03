@@ -41,7 +41,6 @@ vdeq = (3+2.*params.b0.rot).*(0.5.*c.distrib.E0.*c.distrib.L.^2)./...
 taudvd = mults.D.*(2./(3+2.*params.b0.rot));
 taudvdnr = mults.D.*(2/3);
 
-
 %% Quick visu of the results obtained
 
 % figure('Name', 'al')
@@ -309,8 +308,8 @@ plot(L, vd0(:, 2),'DisplayName', 'rot, a0min')
 plot(L, vd0(:, end),'DisplayName', 'rot, a0max')
 plot(L, vdeq,'DisplayName', 'rot, a0=pi/2') 
 plot(L, vd0cg(:,2),'--','DisplayName', 'CG: rot, a0min')
-plot(L, vd0(:, end),'--','DisplayName', 'CG: rot, a0min')
-plot(L, vd0s.vd0cf,'-.','DisplayName', 'CF:rot, a0min')
+plot(L, vd0cg(:, end),'--','DisplayName', 'CG: rot, a0max')
+plot(L, vd0s.vd0cf,'-.','DisplayName', 'CF:rot')
 % set(gca, 'YScale', 'log')
 legend('location', 'northwest')
 grid on
