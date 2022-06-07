@@ -35,12 +35,6 @@ c.distrib.a0 = [a0mx, na0];
 % Computation
 [toms, params, mults, ints, intsnr, vd0s] = timesofmotion(c);
 
-% v_D limits
-vdeq = (3+2.*params.b0.rot).*(0.5.*c.distrib.E0.*c.distrib.L.^2)./...
-    (c.particle(1).*c.planet(1).*c.planet(2));
-taudvd = mults.D.*(2./(3+2.*params.b0.rot));
-taudvdnr = mults.D.*(2/3);
-
 %% Quick visu of the results obtained
 
 % figure('Name', 'al')
@@ -278,6 +272,8 @@ grid on
 hold off
 
 % tau_d for fixed L
+taudvd = mults.D.*(2./(3+2.*params.b0.rot));
+taudvdnr = mults.D.*(2/3);
 figure('Name', 'td only L fixed')
 hold on
 plot(a0(1,:), tdnr(1, :), '*-', 'DisplayName', 'no rot L=5')
@@ -300,7 +296,9 @@ hold off
 vd0 = reshape(vd0s.vd0(1, :, :), [nL,na0]);
 vd0cg = reshape(vd0s.vd0cg(1, :, :), [nL,na0]);
 % vd0s.vd0cf
-% vdeq
+% vdeq % v_D limits
+vdeq = (1.5+2.*params.b0.rot).*(0.5.*c.distrib.E0.*c.distrib.L.^2)./...
+    (c.particle(1).*c.planet(1).*c.planet(2));
 
 figure('Name', 'vdos')
 hold on
@@ -311,6 +309,42 @@ plot(L, vd0cg(:,2),'--','DisplayName', 'CG: rot, a0min')
 plot(L, vd0cg(:, end),'--','DisplayName', 'CG: rot, a0max')
 plot(L, vd0s.vd0cf,'-.','DisplayName', 'CF:rot')
 % set(gca, 'YScale', 'log')
+xlabel('L [ ]')
+ylabel('drift velocity at the equator v_{D_0}')
 legend('location', 'northwest')
 grid on
+hold off
+
+figure('Name', 'vdos composition')
+hold on
+plot(L, (vd0s.vd0cf'./vd0(:, 2))'.*100,'-.','DisplayName', 'CF: a0min')
+plot(L, (vd0s.vd0cf'./vd0(:, end))'.*100,'-.','DisplayName', 'CF: a0max')
+plot(L, (vd0cg(:,2)./vd0(:, 2))'.*100,'--','DisplayName', 'CG: a0min')
+plot(L, (vd0cg(:, end)./vd0(:, end))'.*100,'--','DisplayName', 'CG: a0max')
+xlabel('L [ ]')
+ylabel('Composition drift velocity at the equator [%]')
+legend('location', 'east')
+grid on
+hold off
+
+% tests on limit of td and vd
+% tau_d for fixed L
+taudvdeq = (2.*c.distrib.L.*c.planet(1))./vdeq;
+figure('Name', 'td only L fixed')
+hold on
+plot(a0(1,:), tdnr(1, :), '*-', 'DisplayName', 'no rot L=5')
+plot(a0(1,:), tdnr(end, :), 'o-', 'DisplayName', 'no rot L=10')
+plot(pi/2, taudvdnr(1), '*', 'DisplayName', 'no rot, taudvd L=5', 'MarkerSize', 8)
+plot(pi/2, taudvdnr(end), 'o', 'DisplayName', 'no rot taudvd L=10', 'MarkerSize', 8)
+plot(a0(2,:), td(2, :), '+-', 'DisplayName', 'rot, L=5', 'Linewidth', 2)
+plot(a0(end,:), td(end, :), 'x-', 'DisplayName', 'rot, L=10', 'LineWidth', 2)
+plot(pi/2, taudvd(1), '+', 'DisplayName', 'taudvd, L=5', 'MarkerSize', 8,'Linewidth', 2)
+plot(pi/2, taudvd(end), 'x', 'DisplayName', 'taudvd, L=10', 'MarkerSize', 8,'Linewidth', 2)
+plot(pi/2, taudvdeq(1), '+', 'DisplayName', 'taudvdeq, L=5', 'MarkerSize', 8,'Linewidth', 2)
+plot(pi/2, taudvdeq(end), 'x', 'DisplayName', 'taudvdeq, L=10', 'MarkerSize', 8,'Linewidth', 2)
+xlabel('\alpha_0 [ ]')
+ylabel('\tau_d [s]')
+set(gca, 'YScale', 'log')
+legend('Location', 'NorthWest')
+grid on 
 hold off
