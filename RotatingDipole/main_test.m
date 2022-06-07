@@ -324,6 +324,33 @@ legend('location', 'east')
 grid on
 hold off
 
+% L fixed, wrt a0
+a0 = reshape(ints.a0(1,:,:), [nL,na0]);
+figure('Name', 'vdos')
+hold on
+plot(a0(1, :), vd0(1, :),'DisplayName', 'rot, Lmin')
+plot(a0(end, :), vd0(end, :),'DisplayName', 'rot, Lmax')
+plot(pi/2, vd0pi2(1),'+','DisplayName', 'rot, a0=pi/2, Lmin') 
+plot(pi/2, vd0pi2(end),'+','DisplayName', 'rot, a0=pi/2, Lmax') 
+plot(a0(1, :), vd0cg(1, :),'--','DisplayName', 'CG: rot, Lmin')
+plot(a0(end, :), vd0cg(end, :),'--','DisplayName', 'CG: rot, Lmax')
+set(gca, 'YScale', 'log')
+xlabel('a0 [ ]')
+ylabel('drift velocity at the equator v_{D_0}')
+legend('location', 'northwest')
+grid on
+hold off
+
+figure('Name', 'vdos composition, L fixed')
+hold on
+plot(a0(1,:), (vd0cg(1, :)./vd0(1, :))'.*100,'--','DisplayName', 'CG: Lmin')
+plot(a0(end,:), (vd0cg(end, :)./vd0(end, :))'.*100,'--','DisplayName', 'CG: Lmax')
+xlabel('a0 [ ]')
+ylabel('vd0cg/vd0 [%]')
+legend('location', 'east')
+grid on
+hold off
+
 % tests on limit of td (for fixed L)
 a0 = reshape(ints.a0(1,:,:), [nL,na0]);
 td = reshape(toms.rot.td(1, :, :), [nL,na0]);
