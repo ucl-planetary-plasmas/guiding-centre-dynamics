@@ -256,6 +256,7 @@ hold off
 
 % Tau_d tot
 td = reshape(toms.rot.td(1, :, :), [nL,na0]);
+% fixed a0
 figure('Name', 'td (CG+CF), a0 fixed')
 hold on
 % yyaxis left
@@ -271,19 +272,13 @@ legend
 grid on
 hold off
 
-% tau_d for fixed L
-taudvd = mults.D.*(2./(3+2.*params.b0.rot));
-taudvdnr = mults.D.*(2/3);
+% fixed L
 figure('Name', 'td only L fixed')
 hold on
 plot(a0(1,:), tdnr(1, :), '*-', 'DisplayName', 'no rot L=5')
 plot(a0(1,:), tdnr(end, :), 'o-', 'DisplayName', 'no rot L=10')
-plot(pi/2, taudvdnr(1), '*', 'DisplayName', 'no rot, taudvd L=5', 'MarkerSize', 8)
-plot(pi/2, taudvdnr(end), 'o', 'DisplayName', 'no rot taudvd L=10', 'MarkerSize', 8)
 plot(a0(2,:), td(2, :), '+-', 'DisplayName', 'rot, L=5', 'Linewidth', 2)
 plot(a0(end,:), td(end, :), 'x-', 'DisplayName', 'rot, L=10', 'LineWidth', 2)
-plot(pi/2, taudvd(1), '+', 'DisplayName', 'taudvd, L=5', 'MarkerSize', 8,'Linewidth', 2)
-plot(pi/2, taudvd(end), 'x', 'DisplayName', 'taudvd, L=10', 'MarkerSize', 8,'Linewidth', 2)
 xlabel('\alpha_0 [ ]')
 ylabel('\tau_d [s]')
 set(gca, 'YScale', 'log')
@@ -295,16 +290,18 @@ hold off
 
 vd0 = reshape(vd0s.vd0(1, :, :), [nL,na0]);
 vd0cg = reshape(vd0s.vd0cg(1, :, :), [nL,na0]);
-% vd0s.vd0cf
-% vdeq % v_D limits
-vdeq = (1.5+2.*params.b0.rot).*(0.5.*c.distrib.E0.*c.distrib.L.^2)./...
+% vd0s.vd0cf (no need of reshape)
+% case a0 = pi/2:
+vd0pi2 = (3+2.*params.b0.rot).*(c.distrib.E0.*c.distrib.L.^2)./...
+    (c.particle(1).*c.planet(1).*c.planet(2));
+vd0pi2nr = 3.*(c.distrib.E0.*c.distrib.L.^2)./...
     (c.particle(1).*c.planet(1).*c.planet(2));
 
 figure('Name', 'vdos')
 hold on
 plot(L, vd0(:, 2),'DisplayName', 'rot, a0min')
 plot(L, vd0(:, end),'DisplayName', 'rot, a0max')
-plot(L, vdeq,'DisplayName', 'rot, a0=pi/2') 
+plot(L, vd0pi2,'DisplayName', 'rot, a0=pi/2') 
 plot(L, vd0cg(:,2),'--','DisplayName', 'CG: rot, a0min')
 plot(L, vd0cg(:, end),'--','DisplayName', 'CG: rot, a0max')
 plot(L, vd0s.vd0cf,'-.','DisplayName', 'CF:rot')
@@ -327,21 +324,45 @@ legend('location', 'east')
 grid on
 hold off
 
-% tests on limit of td and vd
-% tau_d for fixed L
-taudvdeq = (2.*c.distrib.L.*c.planet(1))./vdeq;
+% tests on limit of td (for fixed L)
+a0 = reshape(ints.a0(1,:,:), [nL,na0]);
+td = reshape(toms.rot.td(1, :, :), [nL,na0]);
+tdnr = reshape(toms.norot.td(1, :, :), [nL,na0]);
+
+LR2pi = 2*pi.*c.distrib.L.*c.planet(1);
+taudvdpi2 = LR2pi./vd0pi2;
+taudvdpi2nr = LR2pi./vd0pi2nr;
+% not a limit, more for comparison:
+LR2piwide = repmat(LR2pi',[1 length(c.distrib.a0(2))]);
+taudvd0 = LR2piwide./vd0;
+taudvd0nr = LR2piwide./vd0cg;
+% From direct computation, using mults.D common multiplier:
+taudvdD = mults.D.*(2./(3+2.*params.b0.rot));
+taudvdDnr = mults.D.*(2/3);
+% Rmk : taudvdD==taudvdpi2 & (and taudDnr==taudvdpi2nr) OK
+
 figure('Name', 'td only L fixed')
 hold on
-plot(a0(1,:), tdnr(1, :), '*-', 'DisplayName', 'no rot L=5')
-plot(a0(1,:), tdnr(end, :), 'o-', 'DisplayName', 'no rot L=10')
-plot(pi/2, taudvdnr(1), '*', 'DisplayName', 'no rot, taudvd L=5', 'MarkerSize', 8)
-plot(pi/2, taudvdnr(end), 'o', 'DisplayName', 'no rot taudvd L=10', 'MarkerSize', 8)
-plot(a0(2,:), td(2, :), '+-', 'DisplayName', 'rot, L=5', 'Linewidth', 2)
-plot(a0(end,:), td(end, :), 'x-', 'DisplayName', 'rot, L=10', 'LineWidth', 2)
-plot(pi/2, taudvd(1), '+', 'DisplayName', 'taudvd, L=5', 'MarkerSize', 8,'Linewidth', 2)
-plot(pi/2, taudvd(end), 'x', 'DisplayName', 'taudvd, L=10', 'MarkerSize', 8,'Linewidth', 2)
-plot(pi/2, taudvdeq(1), '+', 'DisplayName', 'taudvdeq, L=5', 'MarkerSize', 8,'Linewidth', 2)
-plot(pi/2, taudvdeq(end), 'x', 'DisplayName', 'taudvdeq, L=10', 'MarkerSize', 8,'Linewidth', 2)
+% No Rotation : 
+plot(a0(1,:), tdnr(1, :), 'b*-', 'DisplayName', 'no rot, L=5, tdnr', 'Linewidth', 2)
+plot(a0(1,:), tdnr(end, :), 'co-', 'DisplayName', 'no rot, L=10, tdnr', 'Linewidth', 2)
+% plot(pi/2, taudvdDnr(1), 'b*', 'DisplayName', 'no rot, L=5, taudvdDnr', 'MarkerSize', 8)
+% plot(pi/2, taudvdDnr(end), 'co', 'DisplayName', 'no rot, L=10, taudvdDnr', 'MarkerSize', 8)
+plot(pi/2, taudvdpi2nr(1), 'b*', 'DisplayName', 'no rot, L=5, taudvdpi2nr', 'MarkerSize', 8,'Linewidth', 2)
+plot(pi/2, taudvdpi2nr(end), 'co', 'DisplayName', 'no rot, L=10, taudvdpi2nr', 'MarkerSize', 8,'Linewidth', 2)
+plot(a0(2,:), taudvd0nr(2, :), 'b*--', 'DisplayName', 'no rot, L=5, taudvd0nr', 'Linewidth', 1.5)
+plot(a0(end,:), taudvd0nr(end, :), 'co--', 'DisplayName', 'no rot, L=10, taudvd0nr', 'LineWidth', 1.5)
+% With Rotation
+% figure('Name', 'td only L fixed')
+% hold on
+plot(a0(2,:), td(2, :), 'r+-', 'DisplayName', 'rot, L=5, td', 'Linewidth', 2)
+plot(a0(end,:), td(end, :), 'mx-', 'DisplayName', 'rot, L=10, td', 'LineWidth', 2)
+% plot(pi/2, taudvdD(1), 'r+', 'DisplayName', 'rot, L=5, taudvdD', 'MarkerSize', 8,'Linewidth', 2)
+% plot(pi/2, taudvdD(end), 'mx', 'DisplayName', 'rot, L=10, taudvdD', 'MarkerSize', 8,'Linewidth', 2)
+plot(pi/2, taudvdpi2(1), 'r+', 'DisplayName', 'rot, L=5, taudvdpi2', 'MarkerSize', 8,'Linewidth', 2)
+plot(pi/2, taudvdpi2(end), 'mx', 'DisplayName', 'rot, L=10, taudvdpi2', 'MarkerSize', 8,'Linewidth', 2)
+plot(a0(2,:), taudvd0(2, :), 'r+--', 'DisplayName', 'rot, L=5, taudvd0', 'Linewidth', 2)
+plot(a0(end,:), taudvd0(end, :), 'mx--', 'DisplayName', 'rot, L=10, taudvd0', 'LineWidth', 2)
 xlabel('\alpha_0 [ ]')
 ylabel('\tau_d [s]')
 set(gca, 'YScale', 'log')
