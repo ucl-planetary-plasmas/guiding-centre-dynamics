@@ -47,7 +47,64 @@ hold off
 a0 = reshape(alpha0(1,:,:), [nL,na0]);
 vd0 = reshape(vd0s.vd0(1, :, :), [nL,na0]);
 vd0cg = reshape(vd0s.vd0cg(1, :, :), [nL,na0]);
+vd0cf = vd0s.vd0cf;
 %% Intantaneous drift velocities 
+% 2D plots
+vdscgL5 = vd0cg(1, :)'*cgl;
+vdscgL10 = vd0cg(end, :)'*cgl;
+figure('name', 'vdscg wrt lat and a0; L=5')
+hold on
+pcolor(vdscgL5)
+pcolor(vdscgL10)
+shading flat
+colormap(jet(50));
+cb=colorbar;
+hold off
 
+vdscfl = vd0cf'*cfl;
+figure('name', 'vdscf wrt lat and L(or b0)')
+hold on
+pcolor(vdscfl)
+shading flat
+colormap(jet(50));
+cb=colorbar;
+hold off
 
+vdla00 = vd0cg(:, 1)*cgl+vd0cfl;
+vdla0pi2 = vd0cg(:, end)*cgl+vd0cfl;
+figure('name', 'vds wrt lat and L')
+hold on
+% pcolor(vdla00)
+pcolor(vdla0pi2)
+shading flat
+colormap(jet(50));
+cb=colorbar;
+hold off
 
+% CF term seems to heavily dominate
+%% 1D plots
+vcorot = c.planet(3).*c.distrib.subcorot.*c.planet(1).*c.distrib.L; %Omega*Rp*L
+% case a0=0, L=5;
+figure('name', 'a0=0, L=5')
+hold on
+plot(l, vd0cg(1, 1).*cgl+vd0cf(1).*cfl, 'displayname', 'tot')
+plot(l, vd0cg(1, 1).*cgl, 'displayname', 'CG')
+plot(l, vd0cf(1).*cfl, 'displayname', 'CF')
+plot(l, vcorot(1).*ones(nl, 1), 'displayname', 'v_corot')
+ylabel('instantaneous vd [m/s]')
+xlabel('Latitude \lambda [ ]')
+legend
+grid on
+hold off
+% Negative velocity ! CounterRotating ?! VS SubRotating 
+figure('name', 'a0=0, L=5')
+hold on
+plot(l, vcorot(1)+vd0cg(1, 1).*cgl+vd0cf(1).*cfl, 'displayname', 'tot')
+plot(l, vcorot(1)+vd0cg(1, 1).*cgl, 'displayname', 'CG')
+plot(l, vcorot(1)+vd0cf(1).*cfl, 'displayname', 'CF')
+ylabel('vd +vcorot [m/s]')
+xlabel('Latitude \lambda [ ]')
+% set(gca, 'YScale', 'log')
+legend
+grid on
+hold off
