@@ -83,7 +83,7 @@ hold off
 
 % CF term seems to heavily dominate
 %% 1D plots
-vcorot = c.planet(3).*c.distrib.subcorot.*c.planet(1).*c.distrib.L; %Omega*Rp*L
+vcorot = corotationvelocity(c);
 % case a0=0, L=5;
 figure('name', 'a0=0, L=5')
 hold on
@@ -96,12 +96,17 @@ xlabel('Latitude \lambda [ ]')
 legend
 grid on
 hold off
-% Negative velocity ! CounterRotating ?! VS SubRotating 
-figure('name', 'a0=0, L=5')
+% Negative velocity ! CounterRotating (smaller than) VS SubRotating (less than vcorot but greater than 0)
+figure('name', 'a0=0, L=5 and 10')
 hold on
-plot(l, vcorot(1)+vd0cg(1, 1).*cgl+vd0cf(1).*cfl, 'displayname', 'tot')
-plot(l, vcorot(1)+vd0cg(1, 1).*cgl, 'displayname', 'CG')
-plot(l, vcorot(1)+vd0cf(1).*cfl, 'displayname', 'CF')
+% L=5 (Lmin)
+plot(l, vcorot(1)+vd0cg(1, 1).*cgl+vd0cf(1).*cfl, 'displayname', 'L= 5 : tot')
+plot(l, vcorot(1)+vd0cg(1, 1).*cgl, 'displayname', 'L= 5 : CG')
+plot(l, vcorot(1)+vd0cf(1).*cfl, 'displayname', 'L= 5 : CF')
+% L=10 (Lmax)
+plot(l, vcorot(end)+vd0cg(end, 1).*cgl+vd0cf(1).*cfl, 'displayname', 'L= 10 : tot')
+plot(l, vcorot(end)+vd0cg(end, 1).*cgl, 'displayname', 'L= 10 : CG')
+plot(l, vcorot(end)+vd0cf(end).*cfl, 'displayname', 'L= 10 : CF')
 ylabel('vd +vcorot [m/s]')
 xlabel('Latitude \lambda [ ]')
 % set(gca, 'YScale', 'log')
