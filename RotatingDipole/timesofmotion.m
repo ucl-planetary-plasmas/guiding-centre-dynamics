@@ -19,7 +19,9 @@ mults = multipliers(c);
 
 % with rotation
 % [al, b0] = dimensionless(c);
+% disp('computebeta0 in timesofmotion');
 b0 = computebeta0(c);
+% disp(b0);
 al = computealphaloss(b0, c.distrib.L);
 % c.distrib.a0 = [a0mx, na0];
 [ints, alpha0] = integrals(al, b0,c.distrib.a0(1), c.distrib.a0(2));

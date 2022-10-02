@@ -19,7 +19,8 @@ function [intsstruct, alpha0] = integrals(al, beta0, a0mx, na0)
 
 disp(['Integrals; ' ...
     'max(a0) = ', num2str(a0mx), ...
-    ', numPages = ', num2str(na0)]);
+    ', numPages = ', num2str(na0),...
+    ', size beta0 = ', num2str(size(beta0))]);
 
 %Initialisation
 [numRows,numCols] = size(beta0);
@@ -45,6 +46,7 @@ for i = 1:numRows
                 alpha0(i, j, k)=nan;
             else
                 a0 = alpha0(i,j,k);
+%                 disp(a0);
                 %               Lm
                 if k == numPages
 %                     initpt = pi/4;
@@ -58,8 +60,9 @@ for i = 1:numRows
                 f = @(a,b,x) cos(x).^6.*(1-b.*(1-cos(x).^6))-sin(a)^2.*sqrt(1+3*sin(x).^2);
                 opts = optimset('FunValCheck','on');
                 %lm(i, j, k) = fzero(@(x) f(a0, b0, x), initpt, opts);
+%                 disp(['lm', num2str(i), num2str(j), num2str(k),...
+%                     '; a0 = ', num2str(a0), ', b0 = ', num2str(b0)])
                 lm(i, j, k) = fzero(@(x) f(a0, b0, x), intsearch, opts);
-%                 disp(lm(i, j, k))
 
                 %               Phi
                 opts_phi = {'AbsTol',1e-9,'RelTol',1e-6}; %'ArrayValued',true
@@ -71,7 +74,7 @@ for i = 1:numRows
                 EPS = 1e-5;%To avoid the singularity around lm
                 gc(i, j, k) = 3*integral(@(t)omrdc(t,a0,b0),0,lm(i, j, k), ...
                     opts_gamma{:});
-                gg(i, j, k) = 3*integral(@(t)omrdg(t,a0,b0),0,lm(i, j, k), ...
+                gg(i, j, k) = (3/2)*integral(@(t)omrdg(t,a0,b0),0,lm(i, j, k), ...
                     opts_gamma{:});
                 gcf(i, j, k) = b0*integral(@(t)omrdcf(t,a0,b0),0,lm(i, j, k)-EPS, ...
                     opts_gamma{:});
@@ -84,6 +87,7 @@ for i = 1:numRows
 
     end
 end
+% disp(alpha0);
 % Composition
 gcg = gg + gc;
 pOgcg = phi./gcg;
@@ -118,12 +122,12 @@ intsstruct = struct('a0', alpha0, ...
     function y=omrdc(t,a,b)
         y = sqrt(1-(sqrt(1+3*sin(t).^2)*sin(a)^2./cos(t).^6)...
             -b.*(1-cos(t).^6)).* ...
-            cos(t).^3.*(sin(t).^2+1)./(1+3*sin(t).^2).^1.5;
+            cos(t).^3.*(sin(t).^2+1)./((1+3*sin(t).^2).^1.5);
     end
 
     function y=omrdg(t,a,b)
-        y = sin(a)^2./sqrt(1-(sqrt(1+3*sin(t).^2)*sin(a)^2./cos(t).^6)...
-            - b.*(1-cos(t).^6))./cos(t).^3.*(1+sin(t).^2)./(1+3*sin(t).^2)/2;
+        y = ((1+sin(t).^2).*sin(a)^2)./(cos(t).^3.*(1+3*sin(t).^2).* ...
+            sqrt(1-(sqrt(1+3*sin(t).^2)*sin(a)^2./cos(t).^6)-b.*(1-cos(t).^6)));
     end
 
     function y=omrdcf(t,a,b)
@@ -135,7 +139,7 @@ intsstruct = struct('a0', alpha0, ...
         y = (1-(sqrt(1+3*sin(t).^2)*sin(a)^2/2./cos(t).^6)...
             -b.*(1-cos(t).^6))./ ...
             sqrt(1-(sqrt(1+3*sin(t).^2)*sin(a)^2./cos(t).^6)...
-            -b.*(1-cos(t).^6)).* ...;
+            -b.*(1-cos(t).^6)).* ...
     		cos(t).^3.*(1+sin(t).^2)./(1+3*sin(t).^2).^1.5;
     end
 
